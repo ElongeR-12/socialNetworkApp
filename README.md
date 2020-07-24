@@ -12,3 +12,8 @@ This project aims to create social Netork application. First I will try to creat
             * https://sequelize.org/
             * https://sequelize.org/master/manual/model-basics.html
             * https://sequelize.readthedocs.io/en/2.0/docs/models-definition/
+    * User & Roles Relationship model
+        * documentation
+            * https://fmhelp.filemaker.com/help/18/fmp/en/index.html#page/FMP_Help/many-to-many-relationships.html
+            * https://sequelize.readthedocs.io/en/latest/docs/associations/
+            * Setting up a connection (https://sequelize.readthedocs.io/en/2.0/docs/getting-started/)
