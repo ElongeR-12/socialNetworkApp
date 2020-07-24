@@ -6,3 +6,9 @@ This project aims to create social Netork application. First I will try to creat
 
     * Connect MySQL Database Server from Node.js
         * documentation(https://www.mysqltutorial.org/mysql-nodejs/connect/)
+    
+    * Create User and Role sequelize models
+        * documentation
+            * https://sequelize.org/
+            * https://sequelize.org/master/manual/model-basics.html
+            * https://sequelize.readthedocs.io/en/2.0/docs/models-definition/
