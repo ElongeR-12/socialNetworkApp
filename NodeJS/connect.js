@@ -1,0 +1,15 @@
+const mysql = require('mysql');
+// create a connection to the MySQL database 
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: 'Raharimalala12@',
+    database: 'socialnetdata'
+});
+
+connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results[0].solution);
+    console.log('Connected to the MySQL server.');
+  });
+
