@@ -66,3 +66,6 @@ This project aims to create social Netork application. First I will try to creat
     * Implement login component 
         * documentation 
             * [Hooking into the component lifecycle](https://angular.io/guide/lifecycle-hooks#hooking-into-the-component-lifecycle)
+    * Implement user_roles component
+        * documentation
+            * [Subscription](https://rxjs.dev/guide/subscription)
