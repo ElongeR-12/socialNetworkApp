@@ -35,3 +35,9 @@ This project aims to create social Netork application. First I will try to creat
             * [Associations » Many-Many Associations - through](https://sequelizedocs.fullstackacademy.com/many-many-associations/)
 
 * # Client Side part 
+
+    * Implement token-storage.service
+        * documentation
+            * [Typescript Class](https://www.typescriptlang.org/docs/handbook/classes.html#introduction)
+            * [Public, private, and protected modifiers assigned in members of class](https://www.typescriptlang.org/docs/handbook/classes.html#public-private-and-protected-modifiers)
+            * [Add service, why?, how?, and how to set providedIn Injectable](https://angular.io/tutorial/toh-pt4#add-services)
