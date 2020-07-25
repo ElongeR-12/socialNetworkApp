@@ -1,4 +1,4 @@
 module.exports = {
-  'secret': 'grokonez-super-secret-key',
+  'secret': 'mysecret-for-token',
   ROLEs: ['USER', 'ADMIN', 'PM']
 };
