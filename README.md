@@ -26,3 +26,10 @@ This project aims to create social Netork application. First I will try to creat
         * documentation
             * https://www.npmjs.com/package/mysql#pooling-connections
             * Initialize Sequelize (https://bezkoder.com/node-js-express-sequelize-mysql/)
+
+    * Implement user and userPrivilege controllers
+        * documentation
+            * Joins/Includes (aka "Eager Loading"): https://sequelizedocs.fullstackacademy.com/eager-loading/#joinsincludes-aka-eager-loading
+            * Operators: https://sequelize.org/master/manual/model-querying-basics.html#operators
+            * "Select" Clauses ("attributes"): https://sequelizedocs.fullstackacademy.com/querying/#select-clauses-attributes
+            * Associations » Many-Many Associations - through: https://sequelizedocs.fullstackacademy.com/many-many-associations/
