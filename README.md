@@ -41,3 +41,9 @@ This project aims to create social Netork application. First I will try to creat
             * [Typescript Class](https://www.typescriptlang.org/docs/handbook/classes.html#introduction)
             * [Public, private, and protected modifiers assigned in members of class](https://www.typescriptlang.org/docs/handbook/classes.html#public-private-and-protected-modifiers)
             * [Add service, why?, how?, and how to set providedIn Injectable](https://angular.io/tutorial/toh-pt4#add-services)
+    
+    * Create Http Receptor
+        * documentation
+            * [Intercepting requests and responses](https://angular.io/guide/http#intercepting-requests-and-responses)
+            * [Angular HTTP Interceptor - Build An Authentication Interceptor (Step-by-Step Implementation)](https://www.youtube.com/watch?v=suTtA0Hlwlk)
+            * [HTTP interceptors in Angular](https://blog.angulartraining.com/http-interceptors-in-angular-61dcf80b6bdd)
