@@ -51,3 +51,4 @@ This project aims to create social Netork application. First I will try to creat
     * Implement appComponent 
         * documentation
             * [OnInit lifecycle hook](https://angular.io/api/core/OnInit#oninit)
+            * [Using ngOnInit Lifecycle hook](https://www.youtube.com/watch?v=YYT5zIRBn8A)
