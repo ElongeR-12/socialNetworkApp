@@ -47,3 +47,7 @@ This project aims to create social Netork application. First I will try to creat
             * [Intercepting requests and responses](https://angular.io/guide/http#intercepting-requests-and-responses)
             * [Angular HTTP Interceptor - Build An Authentication Interceptor (Step-by-Step Implementation)](https://www.youtube.com/watch?v=suTtA0Hlwlk)
             * [HTTP interceptors in Angular](https://blog.angulartraining.com/http-interceptors-in-angular-61dcf80b6bdd)
+
+    * Implement appComponent 
+        * documentation
+            * [OnInit lifecycle hook](https://angular.io/api/core/OnInit#oninit)
