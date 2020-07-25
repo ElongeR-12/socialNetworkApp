@@ -45,6 +45,7 @@ This project aims to create social Netork application. First I will try to creat
     * Create Http Receptor
         * documentation
             * [Intercepting requests and responses](https://angular.io/guide/http#intercepting-requests-and-responses)
+            * [Setting default headers](https://angular.io/guide/http#setting-default-headers)
             * [Angular HTTP Interceptor - Build An Authentication Interceptor (Step-by-Step Implementation)](https://www.youtube.com/watch?v=suTtA0Hlwlk)
             * [HTTP interceptors in Angular](https://blog.angulartraining.com/http-interceptors-in-angular-61dcf80b6bdd)
 
@@ -52,3 +53,12 @@ This project aims to create social Netork application. First I will try to creat
         * documentation
             * [OnInit lifecycle hook](https://angular.io/api/core/OnInit#oninit)
             * [Using ngOnInit Lifecycle hook](https://www.youtube.com/watch?v=YYT5zIRBn8A)
+    
+    * Implement auth Service
+        * documentation
+            * [Observables in Angular](https://angular.io/guide/observables-in-angular#observables-in-angular)
+            * [The RxJS library](https://angular.io/guide/rx-library#the-rxjs-library)
+            * [TypeSrypt, Basic Types, Array](https://www.typescriptlang.org/docs/handbook/basic-types.html#array)
+            * [Communicating with backend services using HTTP](https://angular.io/guide/http#communicating-with-backend-services-using-http)
+            * [Adding and updating headers](https://angular.io/guide/http#adding-and-updating-headers)
+            * [Sending data to a server, Making a POST request](https://angular.io/guide/http#sending-data-to-a-server)
