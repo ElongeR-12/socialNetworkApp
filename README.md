@@ -62,3 +62,7 @@ This project aims to create social Netork application. First I will try to creat
             * [Communicating with backend services using HTTP](https://angular.io/guide/http#communicating-with-backend-services-using-http)
             * [Adding and updating headers](https://angular.io/guide/http#adding-and-updating-headers)
             * [Sending data to a server, Making a POST request](https://angular.io/guide/http#sending-data-to-a-server)
+    
+    * Implement login component 
+        * documentation 
+            * [Hooking into the component lifecycle](https://angular.io/guide/lifecycle-hooks#hooking-into-the-component-lifecycle)
