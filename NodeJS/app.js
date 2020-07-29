@@ -10,27 +10,31 @@ app.use(function (req, res, next) {
     next();
 });
 const Role = db.role;
-
-// force: true will drop the table if it already exists
 db.sequelize.sync({force: true}).then(() => {
-  console.log('Drop and Resync with { force: true }');
-  initial();
-});
-function initial() {
-	Role.create({
-		id: 1,
-		name: "USER"
-	});
-
-	Role.create({
-		id: 2,
-		name: "PM"
-	});
-
-	Role.create({
-		id: 3,
-		name: "ADMIN"
-	});
+    initial();
+  });
+  
+async function initial() {
+    try {
+        const role = await Role.create({
+            id: 1,
+            name: "USER"
+         });
+         const role2 = await Role.create({
+            id: 2,
+            name: "PM"
+         });
+         const role3 = await Role.create({
+            id: 3,
+            name: "ADMIN"
+         });
+        console.log('success', role.toJSON());
+        console.log('success', role2.toJSON());
+        console.log('success', role3.toJSON());
+        
+      } catch (err) {
+        console.log(err);
+      }
 }
 app.use(bodyParser.json());	
 app.use('/api/auth', userRoutes);
