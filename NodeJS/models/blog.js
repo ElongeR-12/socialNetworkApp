@@ -1,11 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
   const Blog = sequelize.define('blogs', {
-    id: {
-      //Sequelize = DataTypes
-      type: Sequelize.INTEGER,
-      primaryKey: true,
-      allowNull: false
-    },
     userId: {
       type: Sequelize.INTEGER,
       allowNull: false
