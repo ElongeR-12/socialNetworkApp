@@ -1,22 +1,17 @@
 module.exports = (sequelize, Sequelize) => {
 	const Like = sequelize.define('likes', {
-	  id: {
-        //Sequelize = DataTypes
+      blogId: {
         type: Sequelize.INTEGER,
-        primaryKey: true
-      },
-      postId: {
-        type: Sequelize.UUID,
         allowNull: false
       },
       likeValue: {
         type: Sequelize.INTEGER
       },
-      commenterUsername: {
+      likeUsername: {
         type: Sequelize.STRING,
         required: true
       },
-      commenterUserId: {
+      likeUserId: {
         type: Sequelize.INTEGER,
         required: true
       },
