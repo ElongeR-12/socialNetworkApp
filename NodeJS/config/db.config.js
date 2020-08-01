@@ -1,7 +1,6 @@
 const env = require('./env.js');
 const Sequelize = require('sequelize');
-const { BelongsTo } = require('sequelize');
-const user = require('../models/user.js');
+
 const sequelize = new Sequelize(env.database, env.username, env.password, {
   host: env.host,
   dialect: env.dialect,
@@ -30,6 +29,5 @@ db.user.hasMany(db.blog);
 db.blog.belongsTo(db.user);
 db.blog.hasMany(db.like);
 db.like.belongsTo(db.blog);
-
  
 module.exports = db;
