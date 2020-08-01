@@ -9,5 +9,22 @@ exports.create = (req, res) => {
         })
         .then(post => {
             res.json(post);
-        });
+        })
+        .catch(err => {
+          res.status(500).send({ reason: err.message });
+        })
+}
+
+exports.getAllBlogs = (req, res) => {
+  Blog.findAll().then(
+    (blogs) => {
+      res.status(200).json(blogs);
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
 }

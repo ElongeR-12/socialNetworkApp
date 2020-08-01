@@ -1,7 +1,7 @@
 const env = {
   database: 'socialnetdata',
   username: 'root',
-  password: '123456',
+  password: 'Raharimalala12@',
   host: 'localhost',
   dialect: 'mysql',
   pool: {
