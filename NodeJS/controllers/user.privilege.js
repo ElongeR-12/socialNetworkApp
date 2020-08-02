@@ -13,10 +13,23 @@ exports.userContent = (req, res) => {
 			}
 		}]
 	}).then(user => {
-		res.status(200).send({
-			'description': '>>> User Contents!',
-			'user': user
-		});
+		Blog.findAll().then(
+			(blogs) => {
+			  console.log(user);
+			  console.log(blogs);
+			  res.status(200).send({
+				'description': '>>> User Contents!',
+				'user': user,
+				'blogs': blogs
+			  });
+			}
+		  ).catch(
+			(error) => {
+			  res.status(400).json({
+				error: error
+			  });
+			}
+		  );
 	}).catch(err => {
 		res.status(500).send({
 			'description': 'Can not access User Page',
