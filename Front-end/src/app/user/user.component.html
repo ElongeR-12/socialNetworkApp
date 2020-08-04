@@ -1,7 +1,84 @@
-<h4>Content from Server</h4>
-<div *ngIf="userInfo">
-    <p>Name: <strong>{{userInfo.name}}</strong></p>
-    <p>Email: <strong>{{userInfo.email}}</strong></p>
+
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+      <div class="card">
+        <div class="form-group card-header h6 mt-0">
+          <label for="title">Create Post</label>
+          <input type="text" class="form-control" name="title" [(ngModel)]="form.title" #title="ngModel" required/>
+          <div *ngIf="f.submitted && title.invalid">
+            <div *ngIf="title.errors.required">Title is required</div>
+          </div>
+        </div>
+        <div class="form-group card-body">
+          <label for="content">Content</label>
+          <textarea type="text" class="form-control beautify-textarea" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here..." required></textarea>
+          <div *ngIf="f.submitted && content.invalid">
+            <div *ngIf="content.errors.required">Content is required</div>
+          </div>
+        </div>
+        <div class="form-group card-footer pb-0 mb-0">
+          <button class="btn btn-primary">Text</button>
+          
+          <label class="badge badge-pill badge-info ml-1" style="font-size: medium; cursor: pointer;">
+            Image
+            <input  type="file" style="display: none">
+          </label>
+          
+          <label class="badge badge-pill badge-success ml-1" style="font-size: medium; cursor: pointer;">
+            Video
+            <input type="file" style="display: none">
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="col-3"></div>
 </div>
-{{board}}
-{{errorMessage}}
+<div class="row">
+  <div class="col-3"></div>
+  <div class="col-6">
+    <div class="card mt-2" *ngFor="let blog of blogs">
+      <div class="card-header h6">
+        {{ blog.title }}
+      </div>
+    
+      <!-- CARD BODY SECION IS DYNAMIC-->
+      <div class="card-body pb-0">
+        <div class="make-center beautify-post">
+          {{ blog.content }}
+        </div>
+    
+        <div class="d-flex justify-content-between ">
+          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
+            O Like
+          </span>
+          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
+            0 Subscribe
+          </span>
+          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
+            0 Comments
+          </span>
+        </div>
+      </div>
+    
+      <div class="card-footer d-flex justify-content-between pb-1">
+        <div>
+            <a  class="text-light badge badge-pill badge-primary" style="cursor: pointer;">Like</a>
+            <a  class=" text-light badge badge-pill badge-info ml-1" style="cursor:pointer">Subscribe</a>
+            <a  class="text-light badge badge-pill badge-success ml-1" style="cursor:pointer">Comment</a>
+        </div>
+        
+        <div>
+            <a href="#" class="badge badge-pill badge-secondary">Update</a>
+            <a style="cursor: pointer"  class="text-light badge badge-pill badge-danger ml-1">Delete</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-3"></div>
+</div>
+
+
+

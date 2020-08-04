@@ -1,30 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { BlogsService } from '../services/blogs.service';
+import { BlogCreation } from '../models/blog-creation';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
 export class UserComponent implements OnInit {
-  userInfo: any;
-  board: string;
-  errorMessage: string;
+  form: any = {};
+  blogCreation: BlogCreation;
+  errorMessage = '';
+  blogSub: Subscription;
+  blogs: BlogCreation[];
+  loading: boolean;
+  errorMsg: string;
 
-  constructor(private userService: UserService) { }
+  constructor(private blogsService: BlogsService) { }
 
   ngOnInit(): void {
-    this.userService.getUserBoard().subscribe(
+      this.blogSub = this.blogsService.blogs$.subscribe(
+        (blogs) => {
+          this.blogs = blogs;
+        },
+        (error) => {
+          this.errorMsg = JSON.stringify(error)
+        }
+      );
+    this.blogsService.getBlogs();
+  }
+  onSubmit() {
+    console.log(this.form);
+
+    this.blogCreation = new BlogCreation(
+      this.form.userId,
+      this.form.title,
+      this.form.content
+      );
+
+    this.blogsService.createBlog(this.blogCreation).subscribe(
       data => {
-        this.userInfo = {
-          name: data.user.name,
-          email: data.user.email
-        };
-        this.board = data.description;
+        console.log(data);
+        this.reloadPage();
       },
       error => {
-        this.errorMessage = `${error.status}: ${error.error}`;
+        console.log(error);
+        this.errorMessage = error.error;
       }
     );
+  }
+
+  reloadPage() {
+    window.location.reload();
   }
 
 }
