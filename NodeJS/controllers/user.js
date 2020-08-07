@@ -60,6 +60,7 @@ exports.signin = (req, res) => {
 				auth: true,
 				accessToken: token,
 				username: user.username,
+				userId: user.id,
 				authorities: authorities
 			});
 		})
