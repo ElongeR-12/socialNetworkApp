@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BlogsService } from '../services/blogs.service';
 import { BlogCreation } from '../models/blog-creation';
 import { Subscription } from 'rxjs';
+import { TokenStorageService } from '../auth/token-storage.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
@@ -15,8 +16,9 @@ export class UserComponent implements OnInit {
   blogs: BlogCreation[];
   loading: boolean;
   errorMsg: string;
-
-  constructor(private blogsService: BlogsService) { }
+  info: any;
+  constructor(private blogsService: BlogsService,
+              private token: TokenStorageService) { }
 
   ngOnInit(): void {
       this.blogSub = this.blogsService.blogs$.subscribe(
@@ -31,9 +33,14 @@ export class UserComponent implements OnInit {
   }
   onSubmit() {
     console.log(this.form);
+    this.info = {
+      userId: this.token.getUserId(),
+    };
 
+    const userId = parseInt(this.info.userId);
+    
     this.blogCreation = new BlogCreation(
-      this.form.userId,
+      userId,
       this.form.title,
       this.form.content
       );
