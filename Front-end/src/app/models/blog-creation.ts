@@ -3,7 +3,7 @@ export class BlogCreation {
     title: string;
     content: string;
     constructor(userId: number, title: string, content: string) {
-        this.userId = 1;
+        this.userId = userId;
         this.title = title;
         this.content = content;
     }
