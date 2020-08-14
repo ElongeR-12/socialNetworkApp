@@ -2,13 +2,26 @@ const db = require('../config/db.config');
 const config = require('../config/config');
 const Blog = db.blog;
 exports.create = (req, res) => {
-    Blog.create({
-            userId: req.body.userId,
-            title: req.body.title,
-            content: req.body.content
-        })
+  console.log(req.file);
+      const blogObject = req.body;
+        Blog.create(
+          // req.file ?
+          // {
+            {
+              userId: req.body.userId,
+            ...blogObject,
+            postType: req.body.postType
+            }
+          //   postType: "IMAGE",
+          //   imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+          // } : 
+          // {
+          //   ...blogObject,
+          //   postType: "TEXT"
+          // }
+        )
         .then(post => {
-            res.json(post);
+            res.send(post);
         })
         .catch(err => {
           res.status(500).send({ reason: err.message });
@@ -16,7 +29,7 @@ exports.create = (req, res) => {
 }
 
 exports.getAllBlogs = (req, res) => {
-  Blog.findAll().then(
+  Blog.findAll({order: [['updatedAt', 'DESC']]}).then(
     (blogs) => {
       res.status(200).json(blogs);
     }
