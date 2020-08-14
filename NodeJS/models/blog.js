@@ -9,7 +9,15 @@ module.exports = (sequelize, Sequelize) => {
       required: true
     },
     content: {
-      type: Sequelize.TEXT
+      type: Sequelize.TEXT,
+      required: false
+    },
+    imageUrl: {
+      type: Sequelize.STRING,
+      required: false,
+    },
+    postType: {
+      type: Sequelize.STRING
     }
 
   }, {
