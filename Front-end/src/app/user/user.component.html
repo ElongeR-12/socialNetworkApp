@@ -1,4 +1,3 @@
-
 <div class="row">
   <div class="col-3"></div>
   <div class="col-6">
@@ -13,23 +12,20 @@
         </div>
         <div class="form-group card-body">
           <label for="content">Content</label>
-          <textarea type="text" class="form-control beautify-textarea" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here..." required></textarea>
-          <div *ngIf="f.submitted && content.invalid">
+          <textarea type="text" class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
+          <!-- <div *ngIf="f.submitted && content.invalid && !imageURL">
             <div *ngIf="content.errors.required">Content is required</div>
+          </div> -->
+          <!-- Image Preview -->
+          <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+            <img [src]="imageURL" class="img-responsive">
           </div>
         </div>
         <div class="form-group card-footer pb-0 mb-0">
-          <button class="btn btn-primary">Text</button>
-          
-          <label class="badge badge-pill badge-info ml-1" style="font-size: medium; cursor: pointer;">
-            Image
-            <input  type="file" style="display: none">
-          </label>
-          
-          <label class="badge badge-pill badge-success ml-1" style="font-size: medium; cursor: pointer;">
-            Video
-            <input type="file" style="display: none">
-          </label>
+          <button class="btn btn-primary">Submit</button>
+          <!-- Select File -->
+          <button class="btn btn-success" type="button" (click)="filePicker.click()">Image</button>
+          <input type="file" #filePicker accept="image/*" name="file" [(ngModel)]="form.file" #file="ngModel" (change)="showPreview($event)" />
         </div>
       </div>
     </form>
@@ -43,19 +39,19 @@
       <div class="card-header h6">
         {{ blog.title }}
       </div>
-    
       <!-- CARD BODY SECION IS DYNAMIC-->
       <div class="card-body pb-0">
         <div class="make-center beautify-post">
           {{ blog.content }}
         </div>
+        <div class="make-center beautify-post">
+          <img [src]="blog.imageUrl" alt="" class="img-responsive">
+          
+        </div>
     
         <div class="d-flex justify-content-between ">
           <span class="text-muted badge-light rounded p-1" style="font-size: small;">
             O Like
-          </span>
-          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
-            0 Subscribe
           </span>
           <span class="text-muted badge-light rounded p-1" style="font-size: small;">
             0 Comments
@@ -66,7 +62,6 @@
       <div class="card-footer d-flex justify-content-between pb-1">
         <div>
             <a  class="text-light badge badge-pill badge-primary" style="cursor: pointer;">Like</a>
-            <a  class=" text-light badge badge-pill badge-info ml-1" style="cursor:pointer">Subscribe</a>
             <a  class="text-light badge badge-pill badge-success ml-1" style="cursor:pointer">Comment</a>
         </div>
         

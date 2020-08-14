@@ -47,3 +47,7 @@ This project aims to create social Netork application. First I will try to creat
     * Implement user_roles component
         * documentation
             * [Subscription](https://rxjs.dev/guide/subscription)
+    * Update user template to output post with image or text
+        * documentation
+            * [Show Image Preview with Reactive](https://www.positronx.io/angular-8-show-image-preview-with-reactive-forms-tutorial/)
+            * [Template Driven Form – NgModel for Two-Way Data Binding](https://grokonez.com/frontend/angular/angular-6/angular-6-template-driven-form-ngmodel-for-two-way-data-binding)
