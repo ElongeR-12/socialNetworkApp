@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const blogCtrl = require('../controllers/blog');
-router.post('/post', blogCtrl.create);
+const multer = require('../middleware/multer-config')
+router.post('/post', multer, blogCtrl.create);
 router.get('/post', blogCtrl.getAllBlogs);
 module.exports = router;
