@@ -5,6 +5,7 @@ const userPrivilegeRoutes = require('./routes/user.privilege');
 const postBlog = require('./routes/blog');
 const likeBlog = require('./routes/like');
 const db = require('./config/db.config');
+const path = require('path');
 const app = express();
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -41,6 +42,7 @@ async function initial() {
   }
 }
 app.use(bodyParser.json());
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api/test', userPrivilegeRoutes);
 app.use('/api/create/', postBlog);
