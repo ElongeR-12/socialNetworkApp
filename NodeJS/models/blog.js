@@ -1,9 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
   const Blog = sequelize.define('blogs', {
-    userId: {
-      type: Sequelize.INTEGER,
-      allowNull: false
-    },
     title: {
       type: Sequelize.STRING,
       required: true
@@ -18,8 +14,10 @@ module.exports = (sequelize, Sequelize) => {
     },
     postType: {
       type: Sequelize.STRING
+    },
+    likes: {
+      type: Sequelize.INTEGER
     }
-
   }, {
     underscored: false
   });
