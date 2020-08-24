@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const likeCtrl = require('../controllers/like');
-router.post('/postLike', likeCtrl.pushLike);
+router.post('/postLike', likeCtrl.likePost);
+router.post('/postDislike', likeCtrl.dislikePost);
 module.exports = router;

@@ -22,6 +22,9 @@ This project aims to create social Netork application. First I will try to creat
     * Implement user and userPrivilege controllers
         * documentation
             * [Joins/Includes (aka "Eager Loading")](https://sequelizedocs.fullstackacademy.com/eager-loading/#joinsincludes-aka-eager-loading) || [Operators](https://sequelize.org/master/manual/model-querying-basics.html#operators) || ["Select" Clauses ("attributes")](https://sequelizedocs.fullstackacademy.com/querying/#select-clauses-attributes) || [Associations » Many-Many Associations - through](https://sequelizedocs.fullstackacademy.com/many-many-associations/)
+    * Implement like and dislike api
+        * documentation
+            * [API REST Node.js • Création d'un système d'avis "j'aime" / "j'aime pas"](https://www.youtube.com/watch?v=SMA-JDHSLEw)
 
 * # Client Side part 
 
