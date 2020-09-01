@@ -4,4 +4,5 @@ const blogCtrl = require('../controllers/blog');
 const multer = require('../middleware/multer-config')
 router.post('/post', multer, blogCtrl.create);
 router.get('/post', blogCtrl.getAllBlogs);
+router.get('/:id', blogCtrl.getOneBlog);
 module.exports = router;

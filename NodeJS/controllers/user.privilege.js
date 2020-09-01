@@ -13,7 +13,7 @@ exports.userContent = (req, res) => {
 			}
 		}]
 	}).then(user => {
-		Blog.findAll().then(
+		Blog.findAll({order: [['updatedAt', 'DESC']]}).then(
 			(blogs) => {
 			  console.log(user);
 			  console.log(blogs);

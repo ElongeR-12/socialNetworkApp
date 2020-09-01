@@ -25,13 +25,9 @@ db.role = require('../models/role')(sequelize, Sequelize);
 db.like = require('../models/like')(sequelize, Sequelize);
  
 db.user.belongsToMany(db.role, { through: 'user_roles', foreignKey: 'userId', otherKey: 'roleId'});
-db.blog.belongsTo(db.user, {
-  foreignKey: {
-    allowNull: false
-  }
-});
+db.blog.belongsTo(db.user,{foreignKey: 'userId'});
 
-db.user.hasMany(db.blog);
+db.user.hasOne(db.blog, {foreignKey: 'userId'});
 // db.user.hasMany(db.blog, {foreignKey: 'userId'});
 // db.user.hasMany(db.like, {foreignKey: 'userId'});
 // db.blog.belongsTo(db.user, {foreignKey: 'userId'});
@@ -40,13 +36,13 @@ db.user.hasMany(db.blog);
 // db.like.belongsTo(db.blog, {foreignKey: 'blogId'});
 
 db.user.belongsToMany(db.blog, {
-  through: 'likes',
+  through: db.like,
   foreignKey: 'userId',
   otherKey: 'blogId',
 });
 
 db.blog.belongsToMany(db.user, {
-  through: 'likes',
+  through: db.like,
   foreignKey: 'blogId',
   otherKey: 'userId',
 });

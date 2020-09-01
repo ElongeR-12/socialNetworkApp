@@ -15,38 +15,38 @@ app.use(function(req, res, next) {
 });
 const Role = db.role;
 db.sequelize.sync({
-    force: true
+    force: false
 }).then(() => {
-    initial();
+    // initial();
 });
 
-async function initial() {
-    try {
-        const role = await Role.create({
-            id: 1,
-            name: "USER"
-        });
-        const role2 = await Role.create({
-            id: 2,
-            name: "PM"
-        });
-        const role3 = await Role.create({
-            id: 3,
-            name: "ADMIN"
-        });
-        console.log('success', role.toJSON());
-        console.log('success', role2.toJSON());
-        console.log('success', role3.toJSON());
+// async function initial() {
+//     try {
+//         const role = await Role.create({
+//             id: 1,
+//             name: "USER"
+//         });
+//         const role2 = await Role.create({
+//             id: 2,
+//             name: "PM"
+//         });
+//         const role3 = await Role.create({
+//             id: 3,
+//             name: "ADMIN"
+//         });
+//         console.log('success', role.toJSON());
+//         console.log('success', role2.toJSON());
+//         console.log('success', role3.toJSON());
 
-    } catch (err) {
-        console.log(err);
-    }
-}
+//     } catch (err) {
+//         console.log(err);
+//     }
+// }
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
 app.use('/api/test', userPrivilegeRoutes);
 app.use('/api/create/', postBlog);
 app.use('/api/upload/', uploadBlog);
-app.use('/api/blogs/vote/', likeBlog);
+app.use('/api/blogs', likeBlog);
 module.exports = app;

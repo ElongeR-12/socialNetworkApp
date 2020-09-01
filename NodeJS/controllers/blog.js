@@ -1,6 +1,8 @@
 const db = require('../config/db.config');
 const config = require('../config/config');
 const Blog = db.blog;
+const User = db.user;
+const Like = db.like;
 exports.create = (req, res) => {
     console.log(req.file);
     const blogObject = req.body;
@@ -38,7 +40,10 @@ exports.getAllBlogs = (req, res) => {
     Blog.findAll({
         order: [
             ['updatedAt', 'DESC']
-        ]
+        ],
+        include: [{
+          model: User
+        }]
     }).then(
         (blogs) => {
             res.status(200).json(blogs);
@@ -51,3 +56,23 @@ exports.getAllBlogs = (req, res) => {
         }
     );
 }
+
+exports.getOneBlog = (req, res) => {
+    Blog.findOne({
+      where: {
+        id: req.params.id
+      }
+    }).then(
+      (blog) => {
+        res.status(200).json(blog);
+      }
+    ).catch(
+      (error) => {
+        res.status(404).json({
+          error: error
+        });
+      }
+    );
+  }
+
+  
