@@ -1,79 +1,82 @@
 <div class="row">
-  <div class="col-3"></div>
-  <div class="col-6">
-    <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
-      <div class="card">
-        <div class="form-group card-header h6 mt-0">
-          <label for="title">Create Post</label>
-          <input type="text" class="form-control" name="title" [(ngModel)]="form.title" #title="ngModel" required/>
-          <div *ngIf="f.submitted && title.invalid">
-            <div *ngIf="title.errors.required">Title is required</div>
-          </div>
-        </div>
-        <div class="form-group card-body">
-          <label for="content">Content</label>
-          <textarea type="text" class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
-          <!-- <div *ngIf="f.submitted && content.invalid && !imageURL">
+    <div class="col-3"></div>
+    <div class="col-6">
+        <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+            <div class="card">
+                <div class="form-group card-header h6 mt-0">
+                    <label for="title">Create Post</label>
+                    <input type="text" class="form-control" name="title" [(ngModel)]="form.title" #title="ngModel" required/>
+                    <div *ngIf="f.submitted && title.invalid">
+                        <div *ngIf="title.errors.required">Title is required</div>
+                    </div>
+                </div>
+                <div class="form-group card-body">
+                    <label for="content">Content</label>
+                    <textarea type="text" class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
+                    <!-- <div *ngIf="f.submitted && content.invalid && !imageURL">
             <div *ngIf="content.errors.required">Content is required</div>
           </div> -->
-          <!-- Image Preview -->
-          <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
-            <img [src]="imageURL" class="img-responsive">
-          </div>
-        </div>
-        <div class="form-group card-footer pb-0 mb-0">
-          <button class="btn btn-primary">Submit</button>
-          <!-- Select File -->
-          <button class="btn btn-success" type="button" (click)="filePicker.click()">Image</button>
-          <input type="file" #filePicker accept="image/*" name="file" [(ngModel)]="form.file" #file="ngModel" (change)="showPreview($event)" />
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="col-3"></div>
+                    <!-- Image Preview -->
+                    <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+                        <img [src]="imageURL" class="img-responsive">
+                    </div>
+                </div>
+                <div class="form-group card-footer pb-0 mb-0">
+                    <button class="btn btn-primary">Submit</button>
+                    <!-- Select File -->
+                    <button class="btn btn-success" type="button" (click)="filePicker.click()">Image</button>
+                    <input type="file" #filePicker accept="image/*" name="file" [(ngModel)]="form.file" #file="ngModel" (change)="showPreview($event)" />
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-3"></div>
 </div>
 <div class="row">
-  <div class="col-3"></div>
-  <div class="col-6">
-    <div class="card mt-2" *ngFor="let blog of blogs">
-      <div class="card-header h6">
-        {{ blog.title }}
-      </div>
-      <!-- CARD BODY SECION IS DYNAMIC-->
-      <div class="card-body pb-0">
-        <div class="make-center beautify-post">
-          {{ blog.content }}
-        </div>
-        <div class="make-center beautify-post">
-          <img [src]="blog.imageUrl" alt="" class="img-responsive">
-          
-        </div>
-    
-        <div class="d-flex justify-content-between ">
-          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
-            O Like
+    <div class="col-3"></div>
+    <div class="col-6">
+        <div class="card mt-2" *ngFor="let blog of blogs">
+            <div class="card-header h6 ">
+                {{ blog.title }}
+            </div>
+            <!-- CARD BODY SECION IS DYNAMIC-->
+            <div class="card-body pb-0 ">
+                <div class="make-center beautify-post ">
+                    {{ blog.content }}
+                </div>
+                <div class="make-center beautify-post ">
+                    <img [src]="blog.imageUrl " alt=" " class="img-responsive ">
+
+                </div>
+
+                <div class="d-flex justify-content-between ">
+                    <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
+            {{ blog.likes }} Like(s)
           </span>
-          <span class="text-muted badge-light rounded p-1" style="font-size: small;">
+                    <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
             0 Comments
           </span>
+                </div>
+            </div>
+
+            <div class="card-footer d-flex justify-content-between pb-1 ">
+                <div>
+                    <div #blogId class="like-buttons" *ngIf="!likePending" [attr.data-id]="blog.id">
+                        <div class="likes">
+                          <i [ngClass]="{ 'fas liked': liked, 'far': !liked, 'disabled': disliked }" class="like fa-thumbs-up fa-lg" (click)="onLike(blogId)"></i>
+                        </div>
+                        <div class="dislikes">
+                          <i [ngClass]="{ 'fas disliked': disliked, 'far': !disliked, 'disabled': liked }" class="dislike fa-thumbs-down fa-lg" (click)="onDislike(blogId)"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <a  class="badge badge-pill badge-secondary ">Update</a>
+                    <a style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1 ">Delete</a>
+                </div>
+            </div>
         </div>
-      </div>
-    
-      <div class="card-footer d-flex justify-content-between pb-1">
-        <div>
-            <a  class="text-light badge badge-pill badge-primary" style="cursor: pointer;">Like</a>
-            <a  class="text-light badge badge-pill badge-success ml-1" style="cursor:pointer">Comment</a>
-        </div>
-        
-        <div>
-            <a href="#" class="badge badge-pill badge-secondary">Update</a>
-            <a style="cursor: pointer"  class="text-light badge badge-pill badge-danger ml-1">Delete</a>
-        </div>
-      </div>
     </div>
-  </div>
-  <div class="col-3"></div>
+    <div class="col-3 "></div>
 </div>
-
-
-

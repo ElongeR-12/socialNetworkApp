@@ -1,10 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { BlogsService } from '../services/blogs.service';
 import { BlogCreation } from '../models/blog-creation';
+import { LikeInfo } from '../models/like-info';
+import {LikeService} from '../services/like.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TokenStorageService } from '../auth/token-storage.service';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { Like } from '../models/like';
 
 @Component({
   selector: 'app-user',
@@ -24,11 +28,21 @@ export class UserComponent implements OnInit {
   uploadForm: FormGroup;
   nameFile = null;
   typeFile = null;
+  likePending: boolean;
+  liked: boolean;
+  disliked: boolean;
+  likeStatus = {
+    like: this.liked,
+    likePending: this.likePending
+  };
+  
   constructor(
     private blogsService: BlogsService,
+    private likesService: LikeService,
     private token: TokenStorageService,
     private http: HttpClient,
-    public fb: FormBuilder
+    public fb: FormBuilder,
+    private router: Router
   ) {
     // Reactive Form
     this.uploadForm = this.fb.group({
@@ -46,6 +60,24 @@ export class UserComponent implements OnInit {
       }
     );
     this.blogsService.getBlogs();
+    // this.likesService.getLikes().then(
+    //   (like: Like) => {
+    //     console.log(like);
+    //     console.log(this.token.getUserId());
+    //     console.log(typeof(this.token.getUserId()));
+    //     console.log(like[1].userId);
+    //     for (let i in like) {
+    //       console.log(i); // "0", "1", "2",
+    //    }
+    //    console.log("verification",like[0].isLike)
+    //     if (like[1].isLike === -1 && like[1].userId === parseInt(this.token.getUserId())) {
+    //       this.disliked = true
+    //     }
+    //     if (like[1].isLike === 1 && like[1].userId === parseInt(this.token.getUserId())) {
+    //       this.liked = true
+    //     }
+    //   }
+    // )
   }
   onSubmit() {
     console.log(this.form);
@@ -71,24 +103,16 @@ export class UserComponent implements OnInit {
         .subscribe((res) => {
           console.log(res);
           console.log(res["filename"])
-        // const imageUrl =
-        // 'http://localhost:8080/images/' +
-        // this.nameFile.split(' ').join('_') +
-        // '.' +
-        // MIME_TYPES[this.typeFile];
-        const imageUrl = 'http://localhost:8080/images/' + res["filename"];
-        // this.nameFile.split(' ').join('_') +
-        // '.' +
-        // MIME_TYPES[this.typeFile];
-        this.createPost(userId, imgType, imageUrl);
+          const imageUrl = 'http://localhost:8080/images/' + res["filename"];
+          this.createPost(userId, imgType, imageUrl);
         
-        });
-      
-      
+        });      
     } else {
       this.createPost(userId, textType, '');
     }
   }
+
+
   createPost(userId, postType, imageUrl) {
     this.blogCreation = new BlogCreation(
       userId,
@@ -102,7 +126,7 @@ export class UserComponent implements OnInit {
     this.blogsService.createBlog(this.blogCreation).subscribe(
       (data) => {
         console.log(data);
-        //this.reloadPage();
+        this.reloadPage();
       },
       (error) => {
         console.log(error);
@@ -110,17 +134,15 @@ export class UserComponent implements OnInit {
       }
     );
   }
+
+
   // Image Preview
   showPreview(event) {
-    console.log(event);
     this.selectedFile = event.target.files[0];
     const file = (event.target as HTMLInputElement).files[0];
     this.uploadForm.patchValue({
       avatar: file,
     });
-    console.log(file.name);
-    console.log(this.selectedFile);
-    console.log(file);
     this.nameFile = file.name;
     this.typeFile = file.type;
     console.log(this.nameFile);
@@ -133,7 +155,35 @@ export class UserComponent implements OnInit {
     };
     reader.readAsDataURL(file);
   }
+
   reloadPage() {
     window.location.reload();
+  }
+  
+  onLike(event) {
+    let blogId = event.getAttribute('data-id');
+    console.log("Blog Id: ", blogId);
+    console.log('userId', parseInt(this.token.getUserId()));
+    const newLike = new LikeInfo(parseInt(this.token.getUserId()),1)
+    this.blogsService.likeBlog(blogId, newLike).subscribe(
+      (response) => {
+        console.log(response);
+        this.reloadPage();
+        // this.liked = true    
+      }
+    )
+
+  }
+  onDislike(event) {
+    let blogId = event.getAttribute('data-id');
+    console.log("Blog Id: ", blogId);
+    const newLike = new LikeInfo(parseInt(this.token.getUserId()),-1)
+    this.blogsService.dislikeBlog(blogId, newLike).subscribe(
+      (response) => {
+        console.log(response);
+        this.reloadPage();
+        // this.disliked = true
+      }
+    )
   }
 }

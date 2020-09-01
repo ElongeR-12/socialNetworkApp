@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 import { JwtResponse } from './jwt-response';
 import { AuthLoginInfo } from './login-info';
@@ -14,7 +14,8 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
-
+  isAuth$ = new BehaviorSubject<boolean>(false);
+  
   private loginUrl = 'http://localhost:8080/api/auth/signin';
   private signupUrl = 'http://localhost:8080/api/auth/signup';
 
