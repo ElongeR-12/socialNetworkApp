@@ -57,3 +57,7 @@ This project aims to create social Netork application. First I will try to creat
     * Update user component for uploading and post
         * documentation
             * [Angular Image Upload](https://www.youtube.com/watch?v=YkvqLNcJz3Y)
+    * Manage like in template
+        * documentation
+            * [Mise en pratique de RxJS dans Angular](https://makina-corpus.com/blog/metier/2017/premiers-pas-avec-rxjs-dans-angular)
+            * [HTML5 Data Attributes in Angular 10/9](https://www.techiediaries.com/add-access-html-data-attribute-angular/)
