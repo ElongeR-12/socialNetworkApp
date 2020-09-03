@@ -51,21 +51,27 @@ exports.votePost = (req, res) => {
                                     console.log('vote', typeof(like));
                                     // console.log(userAlreadyLikedFound);
                                     if (!userAlreadyLikedFound) {
-                                        blogFound.setUser(userFound)
-                                            .then(() => {
-                                                Like.create({
-                                                    userId: userId,
-                                                    blogId: blogId,
-                                                    isLike: like
-                                                })
-                                                console.log('vote', like);
-                                            })
-                                            .catch((err) => {
-                                                return res.status(500).json({
-                                                    'error': 'error to create like'
-                                                });
-                                            })
+                                        
+                                        blogFound.addUser(userFound, {through: {
+                                            isLike: 1
+                                        }}).then(elm=>{
+                                                                     
+                                            console.log(elm)
+                                        })
+                                            // .then()
+                                            // Like.create({
+                                            //     userId: userId,
+                                            //     blogId: blogId,
+                                            //     isLike: like
+                                            // })
+                                            // .catch((err) => {
+                                            //     return res.status(500).json({
+                                            //         'error': 'error to create like'
+                                            //     });
+                                            // })
                                             .then(alreadyLikeFound => {
+                                                let originalUserId = blogFound.userId;
+                                                console.log('blogfundU',originalUserId);
                                                 blogFound.update({
                                                     likes: blogFound.likes + like
                                                 }).then(() => {
@@ -185,6 +191,27 @@ exports.getAllVotes = (req, res) => {
     Like.findAll().then(
         (likes) => {
             res.status(200).json(likes);
+        }
+    ).catch(
+        (error) => {
+            res.status(400).json({
+                error: error
+            });
+        }
+    );
+}
+
+exports.getAllBlogWithVotes = (req, res) => {
+    Blog.findAll({
+        include: [{
+          model:User,
+          through: {
+            attributes: ['blogId', 'userId'],
+          }
+          }]
+      }).then(
+        (blogs) => {
+            res.status(200).json(blogs);
         }
     ).catch(
         (error) => {
