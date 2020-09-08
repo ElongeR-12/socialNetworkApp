@@ -74,5 +74,15 @@ exports.getOneBlog = (req, res) => {
       }
     );
   }
+  exports.testAsso = (req, res) => {  
+    Blog.findAll({ 
+      // where: {likers[0]},
+      include: { 
+        all: true
+      }
+    }).then(projects => {
+       res.send(projects);
+    });
 
+  }
   
