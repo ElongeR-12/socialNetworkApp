@@ -2,17 +2,11 @@ const db = require('../config/db.config');
 const Blog = db.blog;
 const Like = db.like;
 const User = db.user;
-// Constants
-const DISLIKED = -1;
-const LIKED = 1;
-const NONE = 0;
-
 exports.votePost = (req, res) => {
-    let like = req.body.like;
-    console.log('req.body', like);
+    const like = req.body.like;
     const userId = req.body.userId;
     // Params
-    let blogId = parseInt(req.params.id);
+    const blogId = parseInt(req.params.id);
 
     if (blogId <= 0 || like < -1 || like > 1) {
         return res.status(400).json({
@@ -43,78 +37,44 @@ exports.votePost = (req, res) => {
                                     }
                                 })
                                 .then(userAlreadyLikedFound => {
-                                    console.log('blogId', blogId);
-                                    console.log('userId', userId);
-                                    console.log('vote', like);
-                                    console.log('blogId', typeof(blogId));
-                                    console.log('userId', typeof(userId));
-                                    console.log('vote', typeof(like));
-                                    // console.log(userAlreadyLikedFound);
                                     if (!userAlreadyLikedFound) {
-                                        
-                                        blogFound.addUser(userFound, {through: {
-                                            isLike: 1
-                                        }}).then(elm=>{
-                                                                     
-                                            console.log(elm)
-                                        })
-                                            // .then()
-                                            // Like.create({
-                                            //     userId: userId,
-                                            //     blogId: blogId,
-                                            //     isLike: like
-                                            // })
-                                            // .catch((err) => {
-                                            //     return res.status(500).json({
-                                            //         'error': 'error to create like'
-                                            //     });
-                                            // })
-                                            .then(alreadyLikeFound => {
-                                                let originalUserId = blogFound.userId;
-                                                console.log('blogfundU',originalUserId);
-                                                blogFound.update({
-                                                    likes: blogFound.likes + like
-                                                }).then(() => {
-                                                    if (blogFound) {
-                                                        return res.status(201).json(blogFound);
-                                                    } else {
-                                                        return res.status(500).json({
-                                                            'error': 'cannot update blog'
-                                                        });
-                                                    }
-                                                }).catch((err) => {
-                                                    res.status(500).json({
-                                                        'error': 'cannot update blog like counter'
-                                                    });
-                                                });
+                                        blogFound.addLikers(userFound, {through: {
+                                            isLike: like
+                                        }})
+                                        .then(alreadyLikeFound => {
+                                            blogFound.update({
+                                                likes: blogFound.likes + like
                                             })
-                                            .catch((err) => {
-                                                return res.status(500).json({
-                                                    'error': 'unable to set user reaction'
+                                            .then(() => {
+                                                if (blogFound) {
+                                                    return res.status(201).json(blogFound);
+                                                } else {
+                                                    return res.status(500).json({
+                                                        'error': 'cannot update blog'
+                                                    });
+                                                }
+                                            }).catch((err) => {
+                                                res.status(500).json({
+                                                    'error': 'cannot update blog like counter'
                                                 });
                                             });
+                                        })
+                                        .catch((err) => {
+                                            return res.status(500).json({
+                                                'error': 'unable to set user reaction'
+                                            });
+                                        });
                                     } else {
-
-                                        //------
-                                        let oldUserLike = userAlreadyLikedFound.isLike;
                                         if (userAlreadyLikedFound.isLike !== like) {
                                             userAlreadyLikedFound.update({
                                                 isLike: like,
-                                            }).then(() => {
+                                            })
+                                            .then(() => {
                                                 //calc new valeur
-                                                console.log('old likes', blogFound.likes);
-                                                console.log('old userlike', oldUserLike);
-                                                console.log('new userlike', like);
-                                                let likeValue;
-                                                if (like === 0){
-                                                    likeValue = blogFound.likes 
-                                                } else {
-                                                    likeValue = blogFound.likes + like                                                                                             
-                                                }
-                                                let newValue = {
-                                                    likes: likeValue
-                                                }
-                                                blogFound.update(newValue).then(() => {
+                                                blogFound.update({
+                                                    likes: blogFound.likes + like                                                                                             
+                                                })
+                                                .then(() => {
                                                     if (blogFound) {
                                                         return res.status(201).json(blogFound);
                                                     } else {
@@ -135,13 +95,14 @@ exports.votePost = (req, res) => {
                                         } /////------
                                         else {
                                             userAlreadyLikedFound.update({
-                                                isLike: NONE,
-                                            }).then(() => {
+                                                isLike: 0,
+                                            })
+                                            .then(() => {
                                                 //calc new valeur
-                                                let newValue = {
+                                                blogFound.update({
                                                     likes: blogFound.likes - like 
-                                                }
-                                                blogFound.update(newValue).then(() => {
+                                                })
+                                                .then(() => {
                                                     if (blogFound) {
                                                         return res.status(201).json(blogFound);
                                                     } else {
@@ -201,23 +162,3 @@ exports.getAllVotes = (req, res) => {
     );
 }
 
-exports.getAllBlogWithVotes = (req, res) => {
-    Blog.findAll({
-        include: [{
-          model:User,
-          through: {
-            attributes: ['blogId', 'userId'],
-          }
-          }]
-      }).then(
-        (blogs) => {
-            res.status(200).json(blogs);
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
-}
