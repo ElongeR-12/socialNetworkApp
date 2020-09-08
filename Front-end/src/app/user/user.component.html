@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
         <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
             <div class="card">
                 <div class="form-group card-header h6 mt-0">
@@ -30,21 +30,21 @@
             </div>
         </form>
     </div>
-    <div class="col-3"></div>
+    <div class="col-lg-3"></div>
 </div>
 <div class="row">
-    <div class="col-3"></div>
-    <div class="col-6">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6">
         <div class="card mt-2" *ngFor="let blog of blogs">
             <div class="card-header h6 ">
                 {{ blog.title }}
             </div>
             <!-- CARD BODY SECION IS DYNAMIC-->
             <div class="card-body pb-0 ">
-                <div class="make-center beautify-post ">
+                <div class="make-center beautify-post " *ngIf="blog.content">
                     {{ blog.content }}
                 </div>
-                <div class="make-center beautify-post ">
+                <div class="make-center beautify-post " *ngIf="blog.imageUrl">
                     <img [src]="blog.imageUrl " alt=" " class="img-responsive ">
 
                 </div>
@@ -72,11 +72,10 @@
                 </div>
 
                 <div>
-                    <a  class="badge badge-pill badge-secondary ">Update</a>
                     <a style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1 ">Delete</a>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-3 "></div>
+    <div class="col-lg-3 "></div>
 </div>
