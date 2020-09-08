@@ -25,6 +25,10 @@ This project aims to create social Netork application. First I will try to creat
     * Implement like and dislike api
         * documentation
             * [API REST Node.js • Création d'un système d'avis "j'aime" / "j'aime pas"](https://www.youtube.com/watch?v=SMA-JDHSLEw)
+    * Use special methods/mixins added to instances
+        * documentation
+            * [Special methods/mixins added to instances](https://sequelize.org/master/manual/assocs.html)
+            * [Inserting / Updating belongsToMany Association with additional attributes](https://github.com/sequelize/sequelize/issues/8381)
 
 * # Client Side part 
 
