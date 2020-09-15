@@ -4,7 +4,9 @@
     <strong>Username:</strong> {{info.username}}<br/>
     <strong>Roles:</strong> {{info.authorities}}<br />
   </p>
-  <button class="btn btn-secondary" (click)="logout()">Logout</button>
+  <button class="btn btn-secondary mx-1" (click)="logout()">Logout</button>
+  <button class="btn btn-secondary bg-danger border-0 mx-1" (click)="delete()" *ngIf="info.userId">Delete</button>
+  <!-- <button class="btn btn-secondary bg-danger border-0 mx-1" (click)="delee()" *ngIf="info.authorities == 'ROLE_ADMIN'">Delete</button> -->
 </div>
  
 <ng-template #loggedOut>
