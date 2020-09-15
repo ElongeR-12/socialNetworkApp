@@ -2,7 +2,21 @@ const db = require('../config/db.config');
 const config = require('../config/config');
 const Blog = db.blog;
 const User = db.user;
-const Like = db.like;
+const Op = db.Sequelize.Op;
+const getPagination = (page, size) => {
+  const limit = size ? +size : 3;
+  const offset = page ? page * limit : 0;
+
+  return { limit, offset };
+};
+
+const getPagingData = (data, page, limit) => {
+  const { count: totalItems, rows: blogs } = data;
+  const currentPage = page ? +page : 0;
+  const totalPages = Math.ceil(totalItems / limit);
+
+  return { totalItems, blogs, totalPages, currentPage };
+};
 exports.create = (req, res) => {
     console.log(req.file);
     const blogObject = req.body;
@@ -77,12 +91,20 @@ exports.getOneBlog = (req, res) => {
   exports.testAsso = (req, res) => {  
     Blog.findAll({ 
       // where: {likers[0]},
-      include: { 
-        all: true
-      }
+      include: [{ 
+        model: User,
+        attributes: ['id', 'name']
+      }, {
+        model: User,
+        as: 'likers',
+        attributes: ['id', 'name'],
+        through: ['userId', 'blogId'],
+        where: {
+          id: req.params.id
+        }
+      }]
     }).then(projects => {
        res.send(projects);
     });
 
   }
-  
