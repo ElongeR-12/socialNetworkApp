@@ -2,14 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { BlogsService } from '../services/blogs.service';
 import { BlogCreation } from '../models/blog-creation';
 import { LikeInfo } from '../models/like-info';
-import {LikeService} from '../services/like.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TokenStorageService } from '../auth/token-storage.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Like } from '../models/like';
-// import { map, filter, scan, forEach} from 'rxjs/operators';
 
 @Component({
   selector: 'app-user',
@@ -22,6 +19,7 @@ export class UserComponent implements OnInit {
   errorMessage = '';
   blogSub: Subscription;
   blogs: BlogCreation[];
+  blog: BlogCreation;
   errorMsg: string;
   info: any;
   imageURL: string;
@@ -29,10 +27,11 @@ export class UserComponent implements OnInit {
   uploadForm: FormGroup;
   nameFile = null;
   typeFile = null;
+  total: number;
+  
   
   constructor(
     private blogsService: BlogsService,
-    private likesService: LikeService,
     private token: TokenStorageService,
     private http: HttpClient,
     public fb: FormBuilder,
@@ -53,10 +52,11 @@ export class UserComponent implements OnInit {
         this.errorMsg = JSON.stringify(error);
       }
     );
+    this.total;
     this.blogsService.getBlogs();
-    this.likesService.getLikes().then(
-      (likes: Like) => {
-        this.styleLikeAndDislike(likes)
+    this.blogsService.getBlogAssociationWithConnectedLikers(parseInt(this.token.getUserId())).then(
+      (blogs: BlogCreation) => {
+        this.styleLikeAndDislike(blogs)
       }
     )
   }
@@ -103,26 +103,24 @@ export class UserComponent implements OnInit {
     }
   }
 
-  styleLikeAndDislike(likes: Like){
-    console.log(likes);
-    for (let element in likes){
-      console.log(likes[element]);
-      const likeButton = document.querySelectorAll(`[data-id='${likes[element].blogId}']`)[0].children[0].children[0];
-      const dislikeButton = document.querySelectorAll(`[data-id='${likes[element].blogId}']`)[0].children[1].children[0];
-      if(likes[element].userId === parseInt(this.token.getUserId())){
-        if(likes[element].isLike === 1){
+  styleLikeAndDislike(blogs: BlogCreation){
+    console.log(blogs);
+    for (let element in blogs){
+      const likeButton = document.querySelectorAll(`[data-id='${blogs[element].id}']`)[0].children[0].children[0];
+      const dislikeButton = document.querySelectorAll(`[data-id='${blogs[element].id}']`)[0].children[1].children[0];
+        if(blogs[element].likers[0].likes.isLike === 1){
           likeButton.classList.add("fas", "liked");
           dislikeButton.classList.add("d-none");
-        }else if(likes[element].isLike === -1){
+        }else if(blogs[element].likers[0].likes.isLike === -1){
           dislikeButton.classList.add("fas", "disliked");
           likeButton.classList.add("d-none");
         }else{
           likeButton.classList.add("far");
           dislikeButton.classList.add("far");
         }
-      }
     }
   }
+
   createPost(userId: number, postType: string, imageUrl: string) {
     this.blogCreation = new BlogCreation(
       userId,
@@ -144,7 +142,6 @@ export class UserComponent implements OnInit {
       }
     );
   }
-
 
   // Image Preview
   showPreview(event: { target: HTMLInputElement; }) {
@@ -172,25 +169,67 @@ export class UserComponent implements OnInit {
   
   onLike(event: { getAttribute: (arg0: string) => any; }) {
     let blogId = event.getAttribute('data-id');
-    console.log("Blog Id: ", blogId);
-    console.log('userId', parseInt(this.token.getUserId()));
-    const newLike = new LikeInfo(parseInt(this.token.getUserId()),1)
-    this.blogsService.likeBlog(blogId, newLike).subscribe(
-      (response) => {
-        console.log(response);
-        this.reloadPage();  
+    this.blogsService.getBlogById(blogId).then(
+      (blog: BlogCreation) => {
+        this.blog = blog;
+        const newLike = new LikeInfo(parseInt(this.token.getUserId()),1)
+        this.blogsService.likeBlog(blogId, newLike).subscribe(
+          (response) => {
+            this.styleLikeAndConterDisplay(blog, response)
+          }
+        )
       }
-    )
+    );
+  }
+  styleLikeAndConterDisplay(blog: BlogCreation, response: string){
+    const likeButton = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].children[0].children[0];
+    const dislikeButton = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].children[1].children[0];
+    const likesTextContent = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].parentElement.parentElement.parentElement.childNodes[1].lastChild.firstChild;
+    if(this.blog['likes'] < response['likes']){
+      likeButton.classList.add("fas", "liked");
+      dislikeButton.classList.add("d-none");
+      this.total = this.blog['likes']+1;
+      likesTextContent.textContent = this.total + ' Like(s)'
+    }else if(this.blog['likes'] > response['likes']){
+      dislikeButton.classList.remove("d-none");
+      likeButton.classList.remove("fas", "liked");
+      likeButton.classList.add("far");
+      dislikeButton.classList.add("far");
+      this.total = this.blog['likes']-1;
+      likesTextContent.textContent = this.total + ' Like(s)'
+    }
   }
   onDislike(event: { getAttribute: (arg0: string) => any; }) {
     let blogId = event.getAttribute('data-id');
-    console.log("Blog Id: ", blogId);
-    const newLike = new LikeInfo(parseInt(this.token.getUserId()),-1)
-    this.blogsService.dislikeBlog(blogId, newLike).subscribe(
-      (response) => {
-        console.log(response);
-        this.reloadPage();
+    this.blogsService.getBlogById(blogId).then(
+      (blog: BlogCreation) => {
+        this.blog = blog;
+        const newLike = new LikeInfo(parseInt(this.token.getUserId()),-1)
+        this.blogsService.likeBlog(blogId, newLike).subscribe(
+          (response) => {
+            this.styleDislikeAndConterDisplay(blog, response)
+          }
+        )
       }
-    )
+    );
+  }
+
+  styleDislikeAndConterDisplay(blog: BlogCreation, response: string){
+    const likeButton = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].children[0].children[0];
+    const dislikeButton = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].children[1].children[0];
+    const likesTextContent = document.querySelectorAll(`[data-id='${blog['id']}']`)[0].parentElement.parentElement.parentElement.childNodes[1].lastChild.firstChild;
+    if(this.blog['likes'] > response['likes']){
+      dislikeButton.classList.add("fas", "disliked");
+      likeButton.classList.add("d-none");
+      this.total = this.blog['likes']-1;
+      likesTextContent.textContent = this.total + ' Like(s)'
+    }else if(this.blog['likes'] < response['likes']){
+      likeButton.classList.remove("d-none");
+      dislikeButton.classList.remove("fas", "liked");
+      likeButton.classList.add("far");
+      dislikeButton.classList.add("far");
+      this.total = this.blog['likes']+1;
+      likesTextContent.textContent = this.total + ' Like(s)'
+    }
   }
 }

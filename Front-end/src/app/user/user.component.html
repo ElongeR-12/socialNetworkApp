@@ -35,7 +35,7 @@
 <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
-        <div class="card mt-2" *ngFor="let blog of blogs">
+        <div class="card mt-2" *ngFor="let blog of blogs; index as i">
             <div class="card-header h6 ">
                 {{ blog.title }}
             </div>
@@ -50,23 +50,26 @@
                 </div>
 
                 <div class="d-flex justify-content-between ">
+                    <!-- <span class="text-muted badge-light rounded p-1 " style="font-size: small; " *ngIf="total != undifined">
+                        {{ blog.likes}} Like(s) 
+                    </span> -->
                     <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
-            {{ blog.likes }} Like(s)
-          </span>
+                        {{ blog.likes}} Like(s)
+                    </span>
                     <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
             0 Comments
-          </span>
+                    </span>
                 </div>
             </div>
 
             <div class="card-footer d-flex justify-content-between pb-1 ">
                 <div>
-                    <div #blogId class="like-buttons" *ngIf="!likePending" [attr.data-id]="blog.id">
+                    <div #blogId class="like-buttons" *ngIf="!likePending" [attr.data-id]="blog.id" [attr.blog-likes]="blog.likes">
                         <div class="likes">
                           <i [ngClass]="{ 'fas liked': liked, 'far': !liked, 'disabled': disliked }" class="like fa-thumbs-up fa-lg" (click)="onLike(blogId)"></i>
                         </div>
                         <div class="dislikes">
-                          <i [ngClass]="{ 'fas disliked': disliked, 'far': !disliked, 'disabled': liked }" class="dislike fa-thumbs-down fa-lg" (click)="onDislike(blogId)"></i>
+                          <i [ngClass]="{ 'fas disliked': disliked, 'far': !disliked, 'disabled': liked }" class="dislike fa-thumbs-down fa-lg" (click)="onDislike(blogId, blogLikes)"></i>
                         </div>
                     </div>
                 </div>
