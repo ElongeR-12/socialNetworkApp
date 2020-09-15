@@ -9,18 +9,15 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 exports.signup = (req, res) => {
-	// Save User to Database
 	User.create({
 		name: req.body.name,
 		username: req.body.username,
 		email: req.body.email,
 		password: bcrypt.hashSync(req.body.password, 8)
 	}).then(user => {
-		Role.findAll({
+		Role.findOne({
 			where: {
-				name: {
-					[Op.or]: req.body.roles
-				}
+				name: 'user'
 			}
 		}).then(roles => {
 			user.setRoles(roles).then(() => {
@@ -87,6 +84,24 @@ exports.signin = (req, res) => {
 	});
 }
 
+exports.getOneUser = (req, res, next) => {
+	User.findOne({
+		where: {
+			id: req.params.id
+		}
+	}).then(
+	  (user) => {
+		res.status(200).json(user);
+	  }
+	).catch(
+	  (error) => {
+		res.status(404).json({
+		  error: error
+		});
+	  }
+	);
+};
+  
 exports.deleteUser = (req, res, next) => {
 	User.findOne({
 		where: {
@@ -113,8 +128,6 @@ exports.deleteUser = (req, res, next) => {
 					element.likers.forEach(el => {
 						const id = el.id;
 						const isLike = el.likes.isLike;
-						console.log('le id', id);
-						console.log('le likes', isLike);
 						if (id === parseInt(req.params.id)) {
 							sumValues.push(parseInt(isLike));
 							indexArr.push(1);
@@ -123,15 +136,9 @@ exports.deleteUser = (req, res, next) => {
 							indexArr.push(0);
 						}
 					})
-					console.log('the values for sum', sumValues);
-					console.log('index of the values in array', indexArr);
 					const reducer = (accumulator, currentValue) => accumulator + currentValue;
 					const likeToRemove = sumValues.reduce(reducer);
-					console.log(likeToRemove);
 					const index = indexArr.indexOf(1);
-					console.log('l index', index);
-					console.log(element.likers[index]);
-		
 					element.update({
 						likes: element.likes - likeToRemove
 					})
