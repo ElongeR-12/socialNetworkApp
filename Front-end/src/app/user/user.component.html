@@ -13,9 +13,6 @@
                 <div class="form-group card-body">
                     <label for="content">Content</label>
                     <textarea type="text" class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
-                    <!-- <div *ngIf="f.submitted && content.invalid && !imageURL">
-            <div *ngIf="content.errors.required">Content is required</div>
-          </div> -->
                     <!-- Image Preview -->
                     <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
                         <img [src]="imageURL" class="img-responsive">
@@ -32,10 +29,27 @@
     </div>
     <div class="col-lg-3"></div>
 </div>
+<div class="row mt-5">
+    <div class="col-lg-3"></div>
+    <div class="col-lg d-flex justify-content-center">
+        <pagination-controls
+          previousLabel="Prev"
+          nextLabel="Next"
+          responsive="true"
+          (pageChange)="handlePageChange($event)"
+        ></pagination-controls>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
 <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6">
-        <div class="card mt-2" *ngFor="let blog of blogs; index as i">
+        <div class="card mt-2" *ngFor="let blog of allBlogs | paginate : {
+            itemsPerPage: pageSize,
+            currentPage: page,
+            totalItems: count
+          };
+          ; index as i">
             <div class="card-header h6 ">
                 {{ blog.title }}
             </div>
@@ -50,35 +64,42 @@
                 </div>
 
                 <div class="d-flex justify-content-between ">
-                    <!-- <span class="text-muted badge-light rounded p-1 " style="font-size: small; " *ngIf="total != undifined">
-                        {{ blog.likes}} Like(s) 
-                    </span> -->
                     <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
                         {{ blog.likes}} Like(s)
-                    </span>
-                    <span class="text-muted badge-light rounded p-1 " style="font-size: small; ">
-            0 Comments
                     </span>
                 </div>
             </div>
 
             <div class="card-footer d-flex justify-content-between pb-1 ">
                 <div>
-                    <div #blogId class="like-buttons" *ngIf="!likePending" [attr.data-id]="blog.id" [attr.blog-likes]="blog.likes">
+                    <div #blogId class="like-buttons" [attr.data-id]="blog.id">
                         <div class="likes">
-                          <i [ngClass]="{ 'fas liked': liked, 'far': !liked, 'disabled': disliked }" class="like fa-thumbs-up fa-lg" (click)="onLike(blogId)"></i>
+                          <i class="like fa-thumbs-up fa-lg far" (click)="onLike(blogId)"></i>
                         </div>
                         <div class="dislikes">
-                          <i [ngClass]="{ 'fas disliked': disliked, 'far': !disliked, 'disabled': liked }" class="dislike fa-thumbs-down fa-lg" (click)="onDislike(blogId, blogLikes)"></i>
+                          <i class="dislike fa-thumbs-down fa-lg far" (click)="onDislike(blogId)"></i>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <a style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1 ">Delete</a>
+                    <button style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1">Delete</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-lg-3 "></div>
 </div>
+<div class="row my-5">
+    <div class="col-lg-3"></div>
+    <div class="col-lg-6 font-weight-bold d-flex justify-content-center">
+        <span class="border border-dark rounded">Items per Page:</span> 
+        <select (change)="handlePageSizeChange($event)">
+          <option *ngFor="let size of pageSizes" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+    </div>
+    <div class="col-lg-3"></div>
+</div>
+

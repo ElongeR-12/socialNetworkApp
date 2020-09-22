@@ -28,8 +28,14 @@ export class UserComponent implements OnInit {
   nameFile = null;
   typeFile = null;
   total: number;
-  
-  
+  page = 1;
+  count = 0;
+  pageSize = 3;
+  pageSizes = [3, 6, 9];
+  allBlogs: any;
+  authorities:string[];
+ 
+
   constructor(
     private blogsService: BlogsService,
     private token: TokenStorageService,
@@ -43,23 +49,20 @@ export class UserComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-    this.blogSub = this.blogsService.blogs$.subscribe(
-      (blogs) => {
-        this.blogs = blogs;
-      },
-      (error) => {
-        this.errorMsg = JSON.stringify(error);
-      }
-    );
+  ngOnInit(): void {   
+    this.retrieveBlogs();
     this.total;
-    this.blogsService.getBlogs();
+    this.authorities = this.token.getAuthorities();
+  }
+
+  displayStyle(){
     this.blogsService.getBlogAssociationWithConnectedLikers(parseInt(this.token.getUserId())).then(
-      (blogs: BlogCreation) => {
+      (blogs: BlogCreation[]) => {
         this.styleLikeAndDislike(blogs)
       }
     )
   }
+
   onSubmit() {
     console.log(this.form);
     this.info = {
@@ -103,21 +106,26 @@ export class UserComponent implements OnInit {
     }
   }
 
-  styleLikeAndDislike(blogs: BlogCreation){
-    console.log(blogs);
-    for (let element in blogs){
-      const likeButton = document.querySelectorAll(`[data-id='${blogs[element].id}']`)[0].children[0].children[0];
-      const dislikeButton = document.querySelectorAll(`[data-id='${blogs[element].id}']`)[0].children[1].children[0];
-        if(blogs[element].likers[0].likes.isLike === 1){
+  styleLikeAndDislike(blogs: BlogCreation[]){
+    for (let element of blogs){
+      console.log(document.querySelectorAll(`[data-id='${element['id']}']`)[0]);
+      if(document.querySelectorAll(`[data-id='${element['id']}']`)[0] == undefined){
+        console.log('Ignore')
+      }else{
+      const likeButton = document.querySelectorAll(`[data-id='${element['id']}']`)[0].children[0].children[0];
+      const dislikeButton = document.querySelectorAll(`[data-id='${element['id']}']`)[0].children[1].children[0];
+        if(element['likers'][0].likes.isLike === 1){
           likeButton.classList.add("fas", "liked");
           dislikeButton.classList.add("d-none");
-        }else if(blogs[element].likers[0].likes.isLike === -1){
+        }else if(element['likers'][0].likes.isLike === -1){
           dislikeButton.classList.add("fas", "disliked");
           likeButton.classList.add("d-none");
         }else{
           likeButton.classList.add("far");
           dislikeButton.classList.add("far");
         }
+      }
+      
     }
   }
 
@@ -168,7 +176,7 @@ export class UserComponent implements OnInit {
   }
   
   onLike(event: { getAttribute: (arg0: string) => any; }) {
-    let blogId = event.getAttribute('data-id');
+    const blogId = event.getAttribute('data-id');
     this.blogsService.getBlogById(blogId).then(
       (blog: BlogCreation) => {
         this.blog = blog;
@@ -200,7 +208,7 @@ export class UserComponent implements OnInit {
     }
   }
   onDislike(event: { getAttribute: (arg0: string) => any; }) {
-    let blogId = event.getAttribute('data-id');
+    const blogId = event.getAttribute('data-id');
     this.blogsService.getBlogById(blogId).then(
       (blog: BlogCreation) => {
         this.blog = blog;
@@ -231,5 +239,46 @@ export class UserComponent implements OnInit {
       this.total = this.blog['likes']+1;
       likesTextContent.textContent = this.total + ' Like(s)'
     }
+  }
+
+  getRequestParams( page, pageSize): any {
+    let params = {};
+
+    if (page) {
+      params[`page`] = page - 1;
+    }
+
+    if (pageSize) {
+      params[`size`] = pageSize;
+    }
+    return params;
+  }
+
+  retrieveBlogs(): void {
+    const params = this.getRequestParams(this.page, this.pageSize);
+    console.log(params);
+    this.blogsService.getAll(params)
+      .subscribe(
+        response => {
+          const { blogs, totalItems } = response;
+          this.allBlogs = blogs;
+          this.count = totalItems; 
+          this.displayStyle();  
+        },
+        error => {
+          console.log(error);
+        });
+    
+  }
+
+  handlePageChange(event): void {
+    this.page = event;
+    this.retrieveBlogs();
+  }
+  
+  handlePageSizeChange(event): void {
+    this.pageSize = event.target.value;
+    this.page = 1;
+    this.retrieveBlogs();
   }
 }
