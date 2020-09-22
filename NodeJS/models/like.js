@@ -3,10 +3,7 @@ module.exports = (sequelize, Sequelize) => {
       isLike: {
         type: Sequelize.INTEGER
       }
-	}, {
-        underscored: false
-      });
-
+	});
 	return Like;
 }
 
