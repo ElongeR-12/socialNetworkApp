@@ -1,4 +1,4 @@
+const dotenv = require('dotenv').config();
 module.exports = {
-  'secret': 'mysecret-for-token',
-  ROLEs: ['USER', 'ADMIN', 'PM']
+  'secret': process.env.TOKEN_SECRET
 };
