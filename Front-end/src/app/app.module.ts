@@ -12,6 +12,10 @@ import { HomeComponent } from './home/home.component';
 import { UserComponent } from './user/user.component';
 import { PmComponent } from './pm/pm.component';
 import { AdminComponent } from './admin/admin.component';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { HomeContentComponent } from './home-content/home-content.component';
+import { CarouselModule } from 'ngx-bootstrap/carousel';
+import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -21,14 +25,18 @@ import { AdminComponent } from './admin/admin.component';
     HomeComponent,
     UserComponent,
     PmComponent,
-    AdminComponent
+    AdminComponent,
+    HomeContentComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    CarouselModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true }
