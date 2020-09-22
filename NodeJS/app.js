@@ -8,6 +8,20 @@ const uploadBlog = require('./routes/upload');
 const db = require('./config/db.config');
 const path = require('path');
 const app = express();
+const session = require('express-session');
+const helmet = require("helmet");
+const dotenv = require('dotenv').config();
+app.use(session({
+    secret: process.env.SECRET,// used to sign the session ID cookie
+    name: process.env.SESSION_NAME,//change session cookie name
+    cookie: {
+        httpOnly: true,// prevent client side Javascript to see the cookie
+        secure: true, /*when using https*/
+        maxAge: 60 * 60 * 1000,
+        domain:'http://localhost:8080' 
+    }
+}));
+app.use(helmet());
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "x-access-token, Origin, Content-Type, Accept");
