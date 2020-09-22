@@ -6,6 +6,7 @@ import { PmComponent } from './pm/pm.component';
 import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component'
+import { WelcomeComponent } from './welcome/welcome.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
   {
       path: 'signup',
       component: RegisterComponent
+  },
+  {
+      path: 'welcome',
+      component: WelcomeComponent
   },
   {
       path: '',
