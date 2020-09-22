@@ -1,8 +1,9 @@
 const db = require('../config/db.config');
-const config = require('../config/config');
 const Blog = db.blog;
 const User = db.user;
+const Like = db.like;
 const Op = db.Sequelize.Op;
+const fs = require('fs');
 const getPagination = (page, size) => {
   const limit = size ? +size : 3;
   const offset = page ? page * limit : 0;
@@ -21,21 +22,12 @@ exports.create = (req, res) => {
     console.log(req.file);
     const blogObject = req.body;
     Blog.create(
-            // req.file ?
-            // {
             {
                 userId: req.body.userId,
                 ...blogObject,
                 likes: 0,
                 postType: req.body.postType
             }
-            //   postType: "IMAGE",
-            //   imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-            // } : 
-            // {
-            //   ...blogObject,
-            //   postType: "TEXT"
-            // }
         )
         .then(post => {
             res.send(post);
@@ -75,7 +67,17 @@ exports.getOneBlog = (req, res) => {
     Blog.findOne({
       where: {
         id: req.params.id
+      },
+      include: [{ 
+        model: User,
+        attributes: ['id', 'name']
+      },
+      { 
+        model: User,
+        as: 'likers',
+        attributes: ['id', 'name']
       }
+    ]
     }).then(
       (blog) => {
         res.status(200).json(blog);
@@ -90,18 +92,16 @@ exports.getOneBlog = (req, res) => {
   }
   exports.testAsso = (req, res) => {  
     Blog.findAll({ 
-      // where: {likers[0]},
       include: [{ 
         model: User,
-        attributes: ['id', 'name']
-      }, {
+        attributes: ['id', 'name'],
         model: User,
         as: 'likers',
         attributes: ['id', 'name'],
         through: ['userId', 'blogId'],
         where: {
           id: req.params.id
-        }
+        },
       }]
     }).then(projects => {
        res.send(projects);
@@ -112,37 +112,63 @@ exports.getOneBlog = (req, res) => {
   // Retrieve all Blogs from the database.
 exports.findAll = (req, res) => {
   const { page, size, title } = req.query;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
   const { limit, offset } = getPagination(page, size);
 
-  Blog.findAndCountAll({ where: condition, limit, offset })
+  Blog.findAndCountAll(
+    { where: condition, limit, offset,
+      order: [
+        ['createdAt', 'DESC']
+    ],
+    include: [{ 
+      model: User,
+      attributes: ['id', 'name'],
+    },
+    { 
+      model: User,
+      as: 'likers',
+      attributes: ['id', 'name']
+    }
+  ] }
+    )
     .then(data => {
       const response = getPagingData(data, page, limit);
-      res.send(response);
+      res.status(200).send(response);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Some error occurred while retrieving blogs."
       });
     });
 };
-  
-// find all published blog
-exports.findAllPublished = (req, res) => {
-  const { page, size } = req.query;
-  const { limit, offset } = getPagination(page, size);
 
-  Blog.findAndCountAll({ where: { postType: 'IMAGE' }, limit, offset })
-    .then(data => {
-      const response = getPagingData(data, page, limit);
-      res.send(response);
-    })
-    .catch(err => {
-      res.status(500).send({
-        message:
-          err.message || "Some error occurred while retrieving tutorials."
+exports.deleteBlog = (req, res, next) => {
+	Blog.findOne({
+		where: {
+			id: req.params.id
+		}
+  })
+  .then((blog)=>{
+    const filename = blog.imageUrl.split('/images/')[1];
+    fs.unlink(`images/${filename}`, () => {
+      blog.destroy()
+      .then(()=>{
+        return res.status(201).json({
+          'message': `blog with id ${req.params.id} deleted successfully`
+        });
+      })
+      .catch((err) => {
+          res.status(500).json({
+              'error': `error to delete blog with id ${req.params.id}`
+          });
       });
+    })
+  })
+	.catch((err) => {
+    res.status(500).json({
+        'error': `error to find blog with id ${req.params.id}`
     });
+  });
 };
