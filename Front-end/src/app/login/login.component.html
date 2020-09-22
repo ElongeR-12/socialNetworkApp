@@ -1,6 +1,6 @@
 <div *ngIf="isLoggedIn; else loggedOut">
-    Logged in as {{roles}}.
-  </div>
+  <app-welcome></app-welcome>
+</div>
   
   <ng-template #loggedOut>
     <div class="row">
