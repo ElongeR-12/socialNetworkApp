@@ -1,5 +1,6 @@
 const db = require('../config/db.config');
 const config = require('../config/config');
+const fs = require('fs');
 const User = db.user;
 const Role = db.role;
 const Blog = db.blog;
@@ -17,7 +18,7 @@ exports.signup = (req, res) => {
 	}).then(user => {
 		Role.findOne({
 			where: {
-				name: 'user'
+				name: 'admin'
 			}
 		}).then(roles => {
 			user.setRoles(roles).then(() => {
@@ -111,9 +112,14 @@ exports.deleteUser = (req, res, next) => {
 	.then((exist)=>{
 		if(exist){
 			Blog.findAll({
-				include: {
-					all: true
-				}
+				include: [{ 
+					model: User,
+					attributes: ['id', 'name'],
+					model: User,
+					as: 'likers',
+					attributes: ['id', 'name'],
+					through: ['userId', 'blogId']
+				}]
 			})
 			.then((blogs) => {
 				const targetData = blogs.filter(element => 
@@ -172,19 +178,28 @@ exports.deleteUser = (req, res, next) => {
 				});
 			});
 			
-			Blog.destroy({
+			Blog.findAll({
 				where: {
 					userId: req.params.id
 				}
-			})
-			.then(()=>{
-				res.status(200).json("blogs created by user with userId "+ req.params.id + " are deleted seccessfully !");
-			})
-			.catch((err)=>{
-				res.status(500).json({
-					'error': 'cannot delete user with userId '+ req.params.id +' !'
+			  })
+			  .then(blogs => {
+				blogs.forEach(element => {
+				const filename = element.imageUrl.split('/images/')[1];
+				fs.unlink(`images/${filename}`, () => {
+				  element.destroy()
+				  .then(() => res.status(200).json({
+					message: 'Objet supprimé !'
+				  }))
+				  .catch(error => res.status(400).json({
+					error
+				  }));
 				});
-			})
+				});
+			  })
+			  .catch(error => res.status(500).json({
+				error
+			  }));
 		}else{
 			return res.status(404).json({
 				'error': 'user not exist'
@@ -192,3 +207,4 @@ exports.deleteUser = (req, res, next) => {
 		}
 	})
 };
+
