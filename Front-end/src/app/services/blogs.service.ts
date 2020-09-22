@@ -71,5 +71,8 @@ export class BlogsService {
   getAll(params: any): Observable<any> {
     return this.http.get(this.baseUrl, { params });
   }
-  
+
+  deleteBlog(id: number) {
+    return this.http.delete<string>(this.blogDeletionUrl + id, httpOptions);
+  }
 }

@@ -281,4 +281,12 @@ export class UserComponent implements OnInit {
     this.page = 1;
     this.retrieveBlogs();
   }
+  delete(event): void {
+    const blogId = event.getAttribute('data-id');
+    this.blogsService.deleteBlog(parseInt(blogId)).subscribe(
+      (response) => {
+        console.log(response);
+      }
+    )
+  }
 }

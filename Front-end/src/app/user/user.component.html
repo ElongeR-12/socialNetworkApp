@@ -83,7 +83,7 @@
                 </div>
 
                 <div>
-                    <button style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1">Delete</button>
+                    <button style="cursor: pointer " class="text-light badge badge-pill badge-danger ml-1" *ngIf="authorities == 'ROLE_ADMIN'" (click)="delete(blogId)">Delete</button>
                 </div>
             </div>
         </div>
