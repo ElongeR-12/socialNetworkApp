@@ -29,7 +29,12 @@ This project aims to create social Netork application. First I will try to creat
         * documentation
             * [Special methods/mixins added to instances](https://sequelize.org/master/manual/assocs.html)
             * [Inserting / Updating belongsToMany Association with additional attributes](https://github.com/sequelize/sequelize/issues/8381)
-
+    * fix bug to allow delete request
+        * documentation
+            * [CORS error :Request header field Authorization is not allowed by Access-Control-Allow-Headers in preflight response](https://www.xspdf.com/help/50444602.html)
+    * Pagination from server
+        * documentation
+            * [Server side Pagination in Node.js with Sequelize & MySQL](https://bezkoder.com/node-js-sequelize-pagination-mysql/)
 * # Client Side part 
 
     * Implement token-storage.service
@@ -65,3 +70,7 @@ This project aims to create social Netork application. First I will try to creat
         * documentation
             * [Mise en pratique de RxJS dans Angular](https://makina-corpus.com/blog/metier/2017/premiers-pas-avec-rxjs-dans-angular)
             * [HTML5 Data Attributes in Angular 10/9](https://www.techiediaries.com/add-access-html-data-attribute-angular/)
+    * Manage pagination in client-side
+        * documentation
+            * [Angular 10 Pagination example | ngx-pagination](https://bezkoder.com/angular-10-pagination-ngx/)
+            * 
