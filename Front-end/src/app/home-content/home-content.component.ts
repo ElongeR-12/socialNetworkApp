@@ -12,17 +12,17 @@ export class HomeContentComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       {
-        title: 'First slide label',
+        title: 'Groupomania',
         description: 'Nulla vitae elit libero, a pharetra augue mollis interdum.',
         imageUrl: '../../assets/images/Logo-slider/icon-left-font.png'
       },
       {
-        title: 'Second slide label',
+        title: 'Groupomania agency place',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         imageUrl: '../../assets/images/Logo-slider/gratisography-219H.jpg'
       },
       {
-        title: 'Third slide label',
+        title: 'Groupomania, Design and development',
         description: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.',
         imageUrl: '../../assets/images/Logo-slider/photo-6.jpg'
       }
