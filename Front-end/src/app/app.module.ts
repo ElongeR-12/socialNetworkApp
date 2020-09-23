@@ -16,6 +16,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { HomeContentComponent } from './home-content/home-content.component';
 import { CarouselModule } from 'ngx-bootstrap/carousel';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     PmComponent,
     AdminComponent,
     HomeContentComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
