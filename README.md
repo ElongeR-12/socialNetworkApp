@@ -57,5 +57,5 @@ This project aims to create social Netork application. First I will try to creat
         * [Mise en pratique de RxJS dans Angular](https://makina-corpus.com/blog/metier/2017/premiers-pas-avec-rxjs-dans-angular)
         * [HTML5 Data Attributes in Angular 10/9](https://www.techiediaries.com/add-access-html-data-attribute-angular/)
     * Manage pagination in client-side
-            * [Angular 10 Pagination example | ngx-pagination](https://bezkoder.com/angular-10-pagination-ngx/)
+        * [Angular 10 Pagination example | ngx-pagination](https://bezkoder.com/angular-10-pagination-ngx/)
             
