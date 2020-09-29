@@ -5,7 +5,6 @@ const User = db.user;
 const Role = db.role;
 const Blog = db.blog;
 const Like = db.like;
-const Op = db.Sequelize.Op;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
@@ -70,7 +69,7 @@ exports.signin = (req, res) => {
 			for (let i = 0; i < roles.length; i++) {
 				authorities.push('ROLE_' + roles[i].name.toUpperCase());
 			}
-			res.status(200).send({
+			res.status(200).json({
 				auth: true,
 				accessToken: token,
 				username: user.username,
@@ -91,120 +90,165 @@ exports.getOneUser = (req, res, next) => {
 			id: req.params.id
 		}
 	}).then(
-	  (user) => {
-		res.status(200).json(user);
-	  }
+		(user) => {
+			res.status(200).json(user);
+		}
 	).catch(
-	  (error) => {
-		res.status(404).json({
-		  error: error
-		});
-	  }
+		(error) => {
+			res.status(404).json({
+				error: error
+			});
+		}
 	);
 };
-  
+
 exports.deleteUser = (req, res, next) => {
+	const deleteBlogAndUser = (blog, user) =>{
+		blog.forEach(element => {
+			const filename = element.imageUrl.split('/images/')[1];
+			fs.unlink(`images/${filename}`, () => {
+				element.destroy()
+				.then(() => {
+					deleteUser(user)
+				})
+				.catch(error => res.status(400).json({
+					error
+				}));
+			});
+		});
+	}
+	const deleteUser = (userToDelete) =>{
+		userToDelete.destroy()
+		.then(() => res.status(200).json({
+			message: 'Objet supprimé !'
+		}))
+		.catch(() => {
+			return res.status(500).json({
+				'error': 'can not remove user'
+			});
+		})
+	}
+
 	User.findOne({
-		where: {
-			id: req.params.id
-		}
+			where: {
+				id: req.params.id
+			}
 	})
-	.then((exist)=>{
-		if(exist){
-			Blog.findAll({
-				include: [{ 
-					model: User,
-					attributes: ['id', 'name'],
-					model: User,
-					as: 'likers',
-					attributes: ['id', 'name'],
-					through: ['userId', 'blogId']
-				}]
-			})
-			.then((blogs) => {
-				const targetData = blogs.filter(element => 
-					element.likers.find(element => 
-						element.id === parseInt(req.params.id)
-					)
-				);
-		
-				targetData.forEach(element => {
-					let sumValues = [];
-					let indexArr = [];
-					element.likers.forEach(el => {
-						const id = el.id;
-						const isLike = el.likes.isLike;
-						if (id === parseInt(req.params.id)) {
-							sumValues.push(parseInt(isLike));
-							indexArr.push(1);
-						} else {
-							sumValues.push(parseInt(isLike) * 0)
-							indexArr.push(0);
+	.then((exist) => {
+		Like.findAll({
+			where: {
+				userId: req.params.id
+			}
+		})
+		.then((like)=>{
+			if (like.length>0){
+				Blog.findAll({
+					include: [
+						{ 
+							model: User,
+							attributes: ['id', 'name'],
+							model: User,
+							as: 'likers',
+							attributes: ['id', 'name'],
+							where: {
+								id: req.params.id
+							}
 						}
-					})
-					const reducer = (accumulator, currentValue) => accumulator + currentValue;
-					const likeToRemove = sumValues.reduce(reducer);
-					const index = indexArr.indexOf(1);
-					element.update({
-						likes: element.likes - likeToRemove
-					})
-					.then(() => {
-						element.removeLikers(
-							element.likers[index]
-						)
-						.then(() => {
-							User.destroy({
-								where: {
-									id: req.params.id
-								}
+					]
+				})
+				.then((blogs) => {
+					if (blogs) {
+						blogs.forEach(element => {
+							console.log('les likes de ce likers', element.likers[0].likes['isLike']);
+							element.update({
+									likes: element.likes - element.likers[0].likes['isLike']
+							})
+							.then(() => {
+								element.removeLikers(
+										element.likers[0]
+								)
+								.then(() => {
+									Blog.findAll({
+										include: [
+											{
+												model: User,
+												attributes: ['id', 'name'],
+												where: {
+													id: req.params.id
+												}
+											}
+										]
+									})
+									.then((blogsOfUser) => {
+										if (blogsOfUser.length>0) {
+											deleteBlogAndUser(blogsOfUser, exist)
+										}else{
+											deleteUser(exist)
+										}
+									})
+									.catch(() => {
+										return res.status(500).json({
+											'error': 'unable find own blogs'
+										});
+									})
+								})
+								.catch(() => {
+									return res.status(500).json({
+										'error': 'unable to remove user reaction'
+									});
+								})
+							})
+							.catch(() => {
+								return res.status(500).json({
+									'error': 'cannot update blog like counter'
+								});
 							})
 						})
-						.catch(()=>{
-							return res.status(500).json({
-								'error': 'unable to remove user reaction'
-							});
-						})
-					})
-					.catch(()=>{
-						return res.status(500).json({
-							'error': 'cannot update blog like counter'
-						});
-					})
-				})
-			})
-			.catch(()=>{
-				res.status(500).json({
-					'error': 'error to query, blog associations with nested users and nested likes'
-				});
-			});
-			
-			Blog.findAll({
-				where: {
-					userId: req.params.id
-				}
-			  })
-			  .then(blogs => {
-				blogs.forEach(element => {
-				const filename = element.imageUrl.split('/images/')[1];
-				fs.unlink(`images/${filename}`, () => {
-				  element.destroy()
-				  .then(() => res.status(200).json({
-					message: 'Objet supprimé !'
-				  }))
-				  .catch(error => res.status(400).json({
-					error
-				  }));
-				});
-				});
-			  })
-			  .catch(error => res.status(500).json({
-				error
-			  }));
-		}else{
-			return res.status(404).json({
-				'error': 'user not exist'
-			});
-		}
-	})
-};
 
+					}	
+				})
+				.catch(() => {
+					return res.status(500).json({
+						'error': 'unable to fing blog with likers'
+					});
+				})
+
+			} else{
+				Blog.findAll({
+					include: [
+						{
+							model: User,
+							attributes: ['id', 'name'],
+							where: {
+								id: req.params.id
+							}
+						}
+					]
+				})
+				.then((blogsOfUser) => {
+					if (blogsOfUser.length>0) {
+						deleteBlogAndUser(blogsOfUser, exist)
+					}else{
+						deleteUser(exist)
+					}
+				})
+				.catch(() => {
+					return res.status(500).json({
+						'error': 'unable find own blogs'
+					});
+				})
+			}
+		})
+		.catch(() => {
+			return res.status(500).json({
+				'error': 'no like setter by userId'
+			});
+		})
+		
+	})
+	.catch(() => {
+		return res.status(500).json({
+			'error': 'unable to fing user'
+		});
+	})
+};		
