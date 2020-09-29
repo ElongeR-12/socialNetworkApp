@@ -13,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./user.component.scss'],
 })
 export class UserComponent implements OnInit {
+  private uploadImageUrl = 'http://localhost:8080/api/upload/image';
+  private filenameUrl = 'http://localhost:8080/images/';
   form: any = {};
   blogCreation: BlogCreation;
   errorMessage = '';
@@ -82,21 +84,21 @@ export class UserComponent implements OnInit {
 
     if (this.selectedFile != null && this.form.content == null) {
       this.http
-        .post('http://localhost:8080/api/upload/image', fd)
+        .post(this.uploadImageUrl, fd)
         .subscribe((res) => {
           console.log(res);
           console.log(res["filename"])
-          const imageUrl = 'http://localhost:8080/images/' + res["filename"];
+          const imageUrl = this.filenameUrl + res["filename"];
           this.createPost(userId, imgType, imageUrl);
         
         });      
     } else if  (this.selectedFile != null && this.form.content != null){
       this.http
-        .post('http://localhost:8080/api/upload/image', fd)
+        .post(this.uploadImageUrl, fd)
         .subscribe((res) => {
           console.log(res);
           console.log(res["filename"])
-          const imageUrl = 'http://localhost:8080/images/' + res["filename"];
+          const imageUrl = this.filenameUrl + res["filename"];
           this.createPost(userId, textAndImageType, imageUrl);
         });
     }else {
@@ -106,7 +108,7 @@ export class UserComponent implements OnInit {
 
   styleLikeAndDislike(blogs: BlogCreation[]){
     for (let element of blogs){
-      // console.log(document.querySelectorAll(`[data-id='${element['id']}']`)[0]);
+      console.log(document.querySelectorAll(`[data-id='${element['id']}']`)[0]);
       if(document.querySelectorAll(`[data-id='${element['id']}']`)[0] == undefined){
         console.log('Ignore')
       }else{
