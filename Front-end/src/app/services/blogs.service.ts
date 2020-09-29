@@ -14,10 +14,12 @@ const httpOptions = {
 export class BlogsService {
   
   blogs$ = new Subject<BlogCreation[]>();
-  private createBlogUrl = 'http://localhost:8080/api/create/post'; 
+  private createBlogUrl = 'http://localhost:8080/api/blogs/post'; 
   private likeBlogUrl = 'http://localhost:8080/api/blogs/';
-  private baseUrl = 'http://localhost:8080/api/create/show/blogs';
-  private blogDeletionUrl = 'http://localhost:8080/api/create/delete/';
+  private baseUrl = 'http://localhost:8080/api/blogs/show/posts';
+  private withAssociationUrl = 'http://localhost:8080/api/blogs/postAssociation/';
+  private oneBlogUrl ='http://localhost:8080/api/blogs/';
+  private blogDeletionUrl = 'http://localhost:8080/api/blogs/delete/';
 
   constructor(private http: HttpClient) {}
 
@@ -38,7 +40,7 @@ export class BlogsService {
   }
   getBlogById(id: number) {
     return new Promise((resolve, reject) => {
-      this.http.get('http://localhost:8080/api/create/' + id).subscribe(
+      this.http.get(this.oneBlogUrl + id).subscribe(
         (blog: BlogCreation) => {
           resolve(blog);
         },
@@ -50,7 +52,7 @@ export class BlogsService {
   }
   getBlogAssociationWithConnectedLikers(id: number) {
     return new Promise((resolve, reject) => {
-        this.http.get('http://localhost:8080/api/create/test/postAsso/'+ id).subscribe(
+        this.http.get(this.withAssociationUrl + id).subscribe(
             (blogs: BlogCreation) => {
               resolve(blogs);
             },

@@ -9,9 +9,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class UserService {
-  private userUrl = 'http://localhost:8080/api/test/user';
-  private pmUrl = 'http://localhost:8080/api/test/pm';
-  private adminUrl = 'http://localhost:8080/api/test/admin';
+  private userUrl = 'http://localhost:8080/api/privilege/user';
+  private pmUrl = 'http://localhost:8080/api/privilege/pm';
+  private adminUrl = 'http://localhost:8080/api/privilege/admin';
   private userDeletionUrl = 'http://localhost:8080/api/auth/';
 
   constructor(private http: HttpClient,
