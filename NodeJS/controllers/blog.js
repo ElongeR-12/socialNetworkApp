@@ -1,7 +1,6 @@
 const db = require('../config/db.config');
 const Blog = db.blog;
 const User = db.user;
-const Like = db.like;
 const Op = db.Sequelize.Op;
 const fs = require('fs');
 const getPagination = (page, size) => {
@@ -18,7 +17,7 @@ const getPagingData = (data, page, limit) => {
 
   return { totalItems, blogs, totalPages, currentPage };
 };
-exports.create = (req, res) => {
+exports.createPost = (req, res) => {
     console.log(req.file);
     const blogObject = req.body;
     Blog.create(
@@ -40,27 +39,6 @@ exports.upload = (req, res) => {
     res.send({
         filename: req.file.filename
     })
-}
-
-exports.getAllBlogs = (req, res) => {
-    Blog.findAll({
-        order: [
-            ['updatedAt', 'DESC']
-        ],
-        include: [{
-          model: User
-        }]
-    }).then(
-        (blogs) => {
-            res.status(200).json(blogs);
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
 }
 
 exports.getOneBlog = (req, res) => {
@@ -90,8 +68,16 @@ exports.getOneBlog = (req, res) => {
       }
     );
   }
-  exports.testAsso = (req, res) => {  
-    Blog.findAll({ 
+  exports.getAssociationWithLikers = (req, res) => {  
+  const { page, size } = req.query;
+  const { limit, offset } = getPagination(page, size);
+    Blog.findAll({
+      limit: limit,
+      offset: offset,
+      subquery: false,
+      order:[
+        ['id', 'DESC']
+      ], 
       include: [{ 
         model: User,
         attributes: ['id', 'name'],
@@ -108,9 +94,9 @@ exports.getOneBlog = (req, res) => {
     });
 
   }
-
+  
   // Retrieve all Blogs from the database.
-exports.findAll = (req, res) => {
+exports.retrieveAllBlogsPerPage = (req, res) => {
   const { page, size, title } = req.query;
   let condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
 
@@ -119,7 +105,8 @@ exports.findAll = (req, res) => {
   Blog.findAndCountAll(
     { where: condition, limit, offset,
       order: [
-        ['createdAt', 'DESC']
+        // ['createdAt', 'DESC'],
+        ['id', 'DESC']
     ],
     include: [{ 
       model: User,

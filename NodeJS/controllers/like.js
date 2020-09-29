@@ -148,17 +148,4 @@ exports.votePost = (req, res) => {
         })
 }
 
-exports.getAllVotes = (req, res) => {
-    Like.findAll().then(
-        (likes) => {
-            res.status(200).json(likes);
-        }
-    ).catch(
-        (error) => {
-            res.status(400).json({
-                error: error
-            });
-        }
-    );
-}
 
