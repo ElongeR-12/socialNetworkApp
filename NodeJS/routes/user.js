@@ -9,6 +9,4 @@ router.post('/signup',[verifySignUp.checkDuplicateUserNameOrEmail], joiSchema.au
 router.post('/signin', rateLimiter.attemptLimit, userCtrl.signin);
 router.get('/:id', [authJwt.verifyToken], userCtrl.getOneUser);
 router.delete('/:id', [authJwt.verifyToken], userCtrl.deleteUser);
-// router.get('/users', userCtrl.getUsers);
-
 module.exports = router;

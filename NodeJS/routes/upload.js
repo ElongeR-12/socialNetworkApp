@@ -5,5 +5,4 @@ const multer = require('../middleware/multer-config');
 const authJwt = require('../middleware/verifyJwtToken');
 router.post('/image', [authJwt.verifyToken], multer, blogCtrl.upload);
 router.get('/image', [authJwt.verifyToken], blogCtrl.upload);
-router.post('/video', [authJwt.verifyToken], multer, blogCtrl.upload);
 module.exports = router;
