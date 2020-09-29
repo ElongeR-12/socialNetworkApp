@@ -1,11 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital@1&display=swap');
 
 h4, .card-text {
-    color: #2c2ad7e3;
     font-family: 'Lora', serif;
+    color: #fd04c7;
+    font-weight: revert
 }
 
 a {
     color: #2015e0;
     font-weight: 700;
+}
+
+@media (max-width: 768px) { 
+    p {
+        display: none;
+    }
 }

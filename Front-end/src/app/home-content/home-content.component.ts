@@ -12,11 +12,6 @@ export class HomeContentComponent implements OnInit {
   ngOnInit(): void {
     this.items = [
       {
-        title: 'Groupomania',
-        description: 'Nulla vitae elit libero, a pharetra augue mollis interdum.',
-        imageUrl: '../../assets/images/Logo-slider/icon-left-font.png'
-      },
-      {
         title: 'Groupomania agency place',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
         imageUrl: '../../assets/images/Logo-slider/gratisography-219H.jpg'
@@ -25,6 +20,16 @@ export class HomeContentComponent implements OnInit {
         title: 'Groupomania, Design and development',
         description: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.',
         imageUrl: '../../assets/images/Logo-slider/photo-6.jpg'
+      },
+      {
+        title: 'Groupomania, workshop time',
+        description: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.',
+        imageUrl: '../../assets/images/Logo-slider/devis-workshop.jpg'
+      },
+      {
+        title: 'Groupomania, workshop time',
+        description: 'Praesent commodo cursus magna, vel scelerisque nisl consectetur.',
+        imageUrl: '../../assets/images/Logo-slider/image-workshop.jpg'
       }
     ]
   }

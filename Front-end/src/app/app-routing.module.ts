@@ -7,6 +7,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component'
 import { WelcomeComponent } from './welcome/welcome.component';
+import { HomeContentComponent } from './home-content/home-content.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
       path: 'welcome',
       component: WelcomeComponent
+  },
+  {
+      path: 'home-content',
+      component: HomeContentComponent
   },
   {
       path: '',

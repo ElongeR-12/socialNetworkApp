@@ -6,9 +6,10 @@
             <div class="col-sm-6 col-md-12">
               <h4>Navigation</h4>
               <nav class="nav d-flex flex-column">
-                <a class="nav-link" href="#">About</a>
-                <a class="nav-link" href="#">Services</a>
-                <a class="nav-link" href="#">Blog</a>
+                <a class="nav-link" routerLink="home-content">About</a>
+                <a class="nav-link" routerLink="home-content">Services</a>
+                <a class="nav-link" routerLink="/user" *ngIf="authority">Blog</a>
+                <a class="nav-link" routerLink="home-content" *ngIf="!authority">Blog</a>
               </nav>
             </div>
           </div>
@@ -20,7 +21,7 @@
            
               <div itemscope="" itemtype="">
                 <a itemprop="url" href="">
-                  <div itemprop="name"><strong>Company</strong></div>
+                  <div itemprop="name"><strong>Groupomania</strong></div>
                 </a>
                 <div itemprop="description"><em>Design + Development + Marketing</em></div>
                 <br>
@@ -34,8 +35,8 @@
                   <span itemprop="addressCountry">France</span>.
                   <br>
                 </div>
-                <strong>Call : </strong><span itemprop="telephone"><a href="tel:033 54 54 34 54">(33)
-                    5342564265</a></span>
+                <strong>Call : </strong><span itemprop="telephone"><a href="tel:033 1 11 11 11 11">(33)
+                  1 11 11 11 11</a></span>
                 <br>
               </div>
             </div>
@@ -67,7 +68,7 @@
       </p>
       <hr class="bg-faded-3">
       <small class="text-light">
-        Your Company <a href="#" class="text-light">Privacy</a> · <a href="#" class="text-light">Terms</a>
+        <a href="#" class="text-light">Privacy</a> · <a href="#" class="text-light">Terms</a>
       </small>
       <p></p>
     </div>

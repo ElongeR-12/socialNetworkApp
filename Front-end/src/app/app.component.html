@@ -1,21 +1,22 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" routerLink="welcome">Groupomania</a>
+      <a class="navbar-brand" routerLink="home" *ngIf="!authority"><img src="../assets/images/Logo-slider/15676009353158_image2.png" alt="Logo"></a>
+      <a class="navbar-brand" routerLink="welcome" *ngIf="authority"><img src="../assets/images/Logo-slider/15676009353158_image2.png" alt="Logo"></a>
     </div>
     <ul class="nav navbar-nav" routerLinkActive="active">
-      <li class="nav-item"><a class="nav-link" routerLink="home">Home</a></li>
+      <li class="nav-item"><a class="nav-link" routerLink="home"><i class="fas fa-home"></i> Home</a></li>
       <li *ngIf="authority === 'user'" class="nav-item">
-        <a class="nav-link" routerLink="user">User Board</a>
+        <a class="nav-link" routerLink="user"><i class="fas fa-newspaper"></i> Dashboard</a>
       </li>
       <li *ngIf="authority === 'admin'" class="nav-item">
-        <a class="nav-link" routerLink="admin">Admin Board</a>
+        <a class="nav-link" routerLink="admin"><i class="fas fa-newspaper"></i> Dashboard</a>
       </li>
       <li *ngIf="authority === 'pm'" class="nav-item">
-        <a class="nav-link" routerLink="pm">PM Board</a>
+        <a class="nav-link" routerLink="pm"><i class="fas fa-newspaper"></i> Dashboard</a>
       </li>
       <li *ngIf="!authority" class="nav-item">
-        <a class="nav-link" routerLink="auth/login">Login</a>
+        <a class="nav-link" routerLink="auth/login"><i class="fas fa-user-check"></i> Login</a>
       </li>
     </ul>
   </div>

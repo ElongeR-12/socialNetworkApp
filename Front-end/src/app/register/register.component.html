@@ -1,9 +1,16 @@
 <div *ngIf="isSignedUp; else signupForm">
-    Your registration is successful. Please login!
+    <div class="d-flex justify-content-center py-5 my-5">
+      <div class="card border-success mb-3 py-5">
+        <div class="card-body text-success">
+          <h5 class="card-title">Account created!</h5>
+          <p class="card-text">Your registration is successful. Please login!</p>
+        </div>
+      </div>
+    </div>
   </div>
   
   <ng-template #signupForm>
-    <div class="row">
+    <div class="row py-5">
       <div class="col-md"></div>
       <div class="col-md-6">
         <form name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
@@ -36,7 +43,9 @@
               required minlength="6" />
             <div *ngIf="f.submitted && password.invalid">
               <div *ngIf="password.errors.required">Password is required</div>
-              <div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
+              <div class="text-danger" *ngIf="password.errors.minlength">*Password must be at least 8 characters, at least 1 lowercase alphabetical character, at least 1 uppercase alphabetical character, at least 1 numeric character, at least one special character except [!@#$%^&*]
+
+              </div>
             </div>
           </div>
           <div class="form-group">

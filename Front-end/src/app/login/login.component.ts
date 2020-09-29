@@ -44,7 +44,7 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getAuthorities();
-        this.username = this.tokenStorage.getUsername()
+        this.username = this.tokenStorage.getUsername();
         this.reloadPage();
       },
       error => {

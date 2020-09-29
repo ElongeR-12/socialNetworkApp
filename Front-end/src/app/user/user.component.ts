@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { TokenStorageService } from '../auth/token-storage.service';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -41,7 +40,6 @@ export class UserComponent implements OnInit {
     private token: TokenStorageService,
     private http: HttpClient,
     public fb: FormBuilder,
-    private router: Router
   ) {
     // Reactive Form
     this.uploadForm = this.fb.group({
@@ -108,16 +106,16 @@ export class UserComponent implements OnInit {
 
   styleLikeAndDislike(blogs: BlogCreation[]){
     for (let element of blogs){
-      console.log(document.querySelectorAll(`[data-id='${element['id']}']`)[0]);
+      // console.log(document.querySelectorAll(`[data-id='${element['id']}']`)[0]);
       if(document.querySelectorAll(`[data-id='${element['id']}']`)[0] == undefined){
         console.log('Ignore')
       }else{
       const likeButton = document.querySelectorAll(`[data-id='${element['id']}']`)[0].children[0].children[0];
       const dislikeButton = document.querySelectorAll(`[data-id='${element['id']}']`)[0].children[1].children[0];
-        if(element['likers'][0].likes.isLike === 1){
+        if(element['likers']!=undefined && element['likers'].length>0 && element['likers'][0].likes.isLike === 1){
           likeButton.classList.add("fas", "liked");
           dislikeButton.classList.add("d-none");
-        }else if(element['likers'][0].likes.isLike === -1){
+        }else if(element['likers']!=undefined && element['likers'].length>0 && element['likers'][0].likes.isLike === -1){
           dislikeButton.classList.add("fas", "disliked");
           likeButton.classList.add("d-none");
         }else{
@@ -241,7 +239,7 @@ export class UserComponent implements OnInit {
     }
   }
 
-  getRequestParams( page, pageSize): any {
+  getRequestParams( page: number, pageSize: number): any {
     let params = {};
 
     if (page) {
@@ -271,21 +269,22 @@ export class UserComponent implements OnInit {
     
   }
 
-  handlePageChange(event): void {
+  handlePageChange(event: number): void {
     this.page = event;
     this.retrieveBlogs();
   }
   
-  handlePageSizeChange(event): void {
+  handlePageSizeChange(event: { target: { value: number; }; }): void {
     this.pageSize = event.target.value;
     this.page = 1;
     this.retrieveBlogs();
   }
-  delete(event): void {
+  delete(event: { getAttribute: (arg0: string) => any; }): void {
     const blogId = event.getAttribute('data-id');
     this.blogsService.deleteBlog(parseInt(blogId)).subscribe(
       (response) => {
         console.log(response);
+        this.reloadPage();
       }
     )
   }

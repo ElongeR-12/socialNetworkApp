@@ -1,11 +1,17 @@
 <div *ngIf="info.token; else loggedOut">
-  <h5 class="text-primary">Your Information</h5>
-  <p>
-    <strong>Username:</strong> {{info.username}}<br/>
-    <strong>Roles:</strong> {{info.authorities}}<br />
-  </p>
-  <button class="btn btn-secondary mx-1" (click)="logout()">Logout</button>
-  <button class="btn btn-secondary bg-danger border-0 mx-1" (click)="delete()" *ngIf="info.userId">Delete</button>
+  <div class="d-flex justify-content-center py-5">
+    <div class="my-5">
+      <h5 class="text-primary">Your Information</h5>
+    <div class="my-5">
+      <p>
+        <strong>Username:</strong> {{info.username}}<br/>
+        <strong>Roles:</strong> {{info.authorities}}<br />
+      </p>
+    </div>
+    <button class="btn btn-secondary mx-1" (click)="logout()">Logout</button>
+    <button class="btn btn-secondary bg-danger border-0 mx-1" (click)="delete()" *ngIf="info.userId">Delete</button>
+    </div>
+  </div>
 </div>
  
 <ng-template #loggedOut>
