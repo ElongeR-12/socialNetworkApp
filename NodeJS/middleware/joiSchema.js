@@ -24,7 +24,7 @@ exports.authenticateSchema = (req, res, next) => {
             })
             .required(),
         password: Joi.string()
-            .pattern(/^[a-zA-Z0-9]{6,30}$/)
+            .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/)
             .required()
     });
     validateRequest.validateRequest(req, res, next, schema);
