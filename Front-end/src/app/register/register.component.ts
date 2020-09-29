@@ -35,8 +35,13 @@ export class RegisterComponent implements OnInit {
       },
       error => {
         console.log(error);
-        this.errorMessage =  `${'error ' + error.status}: ${error.statusText} -->${error.error}`;
+        if(error.error.error.includes('"password" with value')){
+        this.errorMessage =`${'error ' + error.status}: ${error.statusText} ==> *Password must be at least 8 characters, 1 lowercase alphabetical character, 1 uppercase alphabetical character, 1 numeric character, one special character [!@#$%^&*]`
         this.isSignUpFailed = true;
+        }else{
+          this.errorMessage =  `${'error ' + error.status}: ${error.statusText} -->${error.error.error}`;
+          this.isSignUpFailed = true;
+        }
       }
     );
   }

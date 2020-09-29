@@ -43,7 +43,7 @@
               required minlength="6" />
             <div *ngIf="f.submitted && password.invalid">
               <div *ngIf="password.errors.required">Password is required</div>
-              <div class="text-danger" *ngIf="password.errors.minlength">*Password must be at least 8 characters, at least 1 lowercase alphabetical character, at least 1 uppercase alphabetical character, at least 1 numeric character, at least one special character except [!@#$%^&*]
+              <div class="text-danger" *ngIf="password.errors.minlength">*Password must be at least 8 characters, at least 1 lowercase alphabetical character, at least 1 uppercase alphabetical character, at least 1 numeric character, at least one special character [!@#$%^&*]
 
               </div>
             </div>

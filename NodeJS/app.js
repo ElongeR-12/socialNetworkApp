@@ -27,7 +27,6 @@ app.use(helmet());
 const Role = db.role;
 db.sequelize.sync({
     force: false 
-    // force: true
 }).then(() => {
     // initial();
 });

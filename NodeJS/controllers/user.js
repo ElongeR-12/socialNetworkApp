@@ -17,7 +17,7 @@ exports.signup = (req, res) => {
 	}).then(user => {
 		Role.findOne({
 			where: {
-				name: 'admin'
+				name: 'user'
 			}
 		}).then(roles => {
 			user.setRoles(roles).then(() => {
