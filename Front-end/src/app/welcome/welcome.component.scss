@@ -2,12 +2,16 @@
 
 h4, .card-text {
     font-family: 'Lora', serif;
-    color: #fd04c7;
+    color: #04fdc4;
     font-weight: revert
 }
 
+.card-img {
+    filter: brightness(0.5);
+}
+
 a {
-    color: #2015e0;
+    color: #11ea03;
     font-weight: 700;
 }
 

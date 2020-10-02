@@ -5,17 +5,17 @@
             <div class="card">
                 <div class="form-group card-header h6 mt-0">
                     <label for="title">Create Post</label>
-                    <input type="text" class="form-control" name="title" [(ngModel)]="form.title" #title="ngModel" required/>
+                    <input type="text" class="form-control" name="title" [(ngModel)]="form.title" #title="ngModel" id="title" required/>
                     <div *ngIf="f.submitted && title.invalid">
                         <div *ngIf="title.errors.required">Title is required</div>
                     </div>
                 </div>
                 <div class="form-group card-body">
                     <label for="content">Content</label>
-                    <textarea type="text" class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
+                    <textarea class="form-control beautify-textarea" id="content" name="content" [(ngModel)]="form.content" #content="ngModel" placeholder="Write something here or upload image ..." required *ngIf="!imageURL"></textarea>
                     <!-- Image Preview -->
                     <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
-                        <img [src]="imageURL" class="img-responsive">
+                        <img [src]="imageURL" alt="preview" class="img-responsive">
                     </div>
                 </div>
                 <div class="form-group card-footer pb-0 mb-0">
@@ -37,6 +37,9 @@
           nextLabel="Next"
           responsive="true"
           (pageChange)="handlePageChange($event)"
+          screenReaderPaginationLabel="Pagination"
+          screenReaderPageLabel="page"
+          screenReaderCurrentLabel="You're on page"
         ></pagination-controls>
     </div>
     <div class="col-lg-3"></div>
@@ -62,7 +65,7 @@
                     {{ blog.content }}
                 </div>
                 <div class="make-center beautify-post " *ngIf="blog.imageUrl">
-                    <img [src]="blog.imageUrl " alt=" " class="img-responsive ">
+                    <img [src]="blog.imageUrl " [attr.alt]="blog.title" class="img-responsive ">
 
                 </div>
 
@@ -96,12 +99,14 @@
 <div class="row my-5">
     <div class="col-lg-3"></div>
     <div class="col-lg-6 font-weight-bold d-flex justify-content-center">
-        <span class="border border-dark rounded">Items per Page:</span> 
-        <select (change)="handlePageSizeChange($event)">
-          <option *ngFor="let size of pageSizes" [ngValue]="size">
-            {{ size }}
-          </option>
-        </select>
+        <label>
+            <span class="border border-dark rounded">Items per Page:</span> 
+            <select (change)="handlePageSizeChange($event)">
+              <option *ngFor="let size of pageSizes" [ngValue]="size">
+                {{ size }}
+              </option>
+            </select>
+        </label>
     </div>
     <div class="col-lg-3"></div>
 </div>
