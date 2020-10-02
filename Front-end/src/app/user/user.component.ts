@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { BlogsService } from '../services/blogs.service';
 import { BlogCreation } from '../models/blog-creation';
 import { LikeInfo } from '../models/like-info';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
   selector: 'app-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UserComponent implements OnInit {
   private uploadImageUrl = 'http://localhost:8080/api/upload/image';
@@ -76,6 +77,7 @@ export class UserComponent implements OnInit {
         'image/jpg': 'jpg',
         'image/jpeg': 'jpg',
         'image/png': 'png',
+        'image/gif': 'gif',
       }; 
 
     const fd = new FormData();
