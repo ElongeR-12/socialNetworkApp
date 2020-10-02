@@ -9,27 +9,41 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 exports.signup = (req, res) => {
-	User.create({
-		name: req.body.name,
-		username: req.body.username,
-		email: req.body.email,
-		password: bcrypt.hashSync(req.body.password, 8)
-	}).then(user => {
-		Role.findOne({
-			where: {
-				name: 'user'
-			}
-		}).then(roles => {
-			user.setRoles(roles).then(() => {
-				res.send({
-					message: 'Registered successfully!'
+	const createUser = (role)=>{
+		User.create({
+			name: req.body.name,
+			username: req.body.username,
+			email: req.body.email,
+			password: bcrypt.hashSync(req.body.password, 8)
+		}).then(user => {
+			Role.findOne({
+				where: {
+					name: role
+				}
+			}).then(roles => {
+				user.setRoles(roles).then(() => {
+					res.send({
+						message: `${role} registered successfully!`
+					});
+				});
+			}).catch(err => {
+				res.status(500).send({
+					reason: err.message
 				});
 			});
 		}).catch(err => {
 			res.status(500).send({
 				reason: err.message
 			});
-		});
+		})
+	}
+	User.findAll()
+	.then((users)=>{
+		if(users.length>=1){
+			createUser('user')
+		}else{
+			createUser('admin')
+		}
 	}).catch(err => {
 		res.status(500).send({
 			reason: err.message

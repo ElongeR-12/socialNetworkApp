@@ -12,6 +12,7 @@ const cors = require('cors');
 app.use(cors());
 const session = require('express-session');
 const helmet = require("helmet");
+const { sequelize } = require('./config/db.config');
 const dotenv = require('dotenv').config();
 app.use(session({
     secret: process.env.SECRET,// used to sign the session ID cookie
@@ -25,12 +26,20 @@ app.use(session({
 }));
 app.use(helmet());
 const Role = db.role;
-db.sequelize.sync({
-    force: false 
-}).then(() => {
-    // initial();
+sequelize.query('show tables')
+.then((rows) =>{
+    if(rows[0].length > 0){
+        db.sequelize.sync({
+            force: false 
+        })
+    }else{
+        db.sequelize.sync({
+            force: true 
+        }).then(() => {
+            initial();  
+        });
+    }
 });
-
 async function initial() {
     try {
         const role = await Role.create({
