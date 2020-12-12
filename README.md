@@ -1,7 +1,7 @@
 * # Description
 
 This project aims to create social Netork application. First I will try to create a secured users registration and login. Three users role is defined to make hierarchical privileges. Then CRUD operation will be realized allowing users to share multimedia or text content. Technologies: Node JS, Express, MySQL, sequelize, Angular cli
-* # Demo
+* # Demo - click image to view video
 
 [![Demo Small Social Media Network](./Front-end/src/assets/images/readMeImages/social-network.png)](https://www.youtube.com/watch?v=1gL96SfhXco&t=81s)
 
